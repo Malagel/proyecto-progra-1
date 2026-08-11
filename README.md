@@ -1,6 +1,6 @@
 # Gestión de Avance Curricular
 
-Sistema de Información (SIA) para el curso **INF2236 - Programación Avanzada**, PUCV, periodo 2026-1.
+Sistema de Información (SIA) para el curso **INF2236 - Programación Avanzada**, PUCV, periodo 2S26
 
 ## Descripción
 
@@ -28,9 +28,9 @@ src/main/java/
 
 ## Integrantes
 
-- [Nombre integrante 1]
-- [Nombre integrante 2]
-- [Nombre integrante 3]
+- Gustavo Ordenes
+- Nicolas Mariangel
+- Alvaro Ulloa
 
 ## Estado del proyecto
 
