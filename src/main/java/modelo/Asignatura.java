@@ -1,5 +1,10 @@
 package modelo;
 
+/** CLASE : ASIGNATURA 
+ * Dentro de esta clase se encuentran campos como clave, nombre, y nivel. 
+ * Estas sirven para identificar a cada asignatura 
+**/
+
 public class Asignatura {
 	private String clave; 
 	private String nombre;
@@ -10,6 +15,12 @@ public class Asignatura {
 		this.nombre = nombre; 
 		this.nivel = nivel; 
 	}
+	
+	/**
+	 * Getters y Setters para los campos de Asignatura.
+	 * Estos permiten solicitar o modificar los datos de manera externa a la clase.
+	 * 
+	 */
 	
 	public String getClave() {
 		return clave;
