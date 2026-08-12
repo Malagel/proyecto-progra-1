@@ -1,6 +1,6 @@
 package avancecurricular.model;
 
-public class Alumno {
+public class Estudiante {
 	private String nombre; 
 	private String rut; 
 	private int edad;

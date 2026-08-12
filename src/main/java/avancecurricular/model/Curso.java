@@ -1,16 +1,16 @@
 package avancecurricular.model;
 
-/** CLASE : ASIGNATURA 
+/** CLASE : Curso 
  * Dentro de esta clase se encuentran campos como clave, nombre, y nivel. 
  * Estas sirven para identificar a cada asignatura 
 **/
 
-public class Asignatura {
+public class Curso {
 	private String clave; 
 	private String nombre;
 	private int nivel; 
 	
-	public Asignatura(String clave, String nombre, int nivel){
+	public Curso(String clave, String nombre, int nivel){
 		this.clave = clave; 
 		this.nombre = nombre; 
 		this.nivel = nivel; 
