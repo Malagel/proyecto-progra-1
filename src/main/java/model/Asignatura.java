@@ -1,4 +1,4 @@
-package modelo;
+package model;
 
 /** CLASE : ASIGNATURA 
  * Dentro de esta clase se encuentran campos como clave, nombre, y nivel. 
@@ -10,7 +10,7 @@ public class Asignatura {
 	private String nombre;
 	private int nivel; 
 	
-	public Asignatura(String clave,String nombre,int nivel){
+	public Asignatura(String clave, String nombre, int nivel){
 		this.clave = clave; 
 		this.nombre = nombre; 
 		this.nivel = nivel; 
