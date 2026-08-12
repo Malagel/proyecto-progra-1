@@ -10,15 +10,6 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 
 - Java (JDK 11)
 - Maven
-- Eclipse IDE for Java Developers
-
-## Estructura del proyecto
-
-```
-src/main/java/
-├── modelo/     → Clases del dominio (Asignatura, Profesor, Alumno, EstadoAvance)
-└── app/        → Clase principal (Main) con datos de prueba
-```
 
 ## Cómo ejecutar
 
@@ -66,7 +57,7 @@ src/main/java/
 	- Map<Profesor, List<Curso>>
 	- Map<Carrera, List<Curso>>
 
-- Entity Caches: Catalogo Maestro con las entidades reales. String = Identificador 
+- Entity Caches: Catálogo Maestro con las entidades reales. String = Identificador 
 	- Map<String, Estudiante>
 	- Map<String, Profesor>
 	- Map<String, Curso>
@@ -74,8 +65,8 @@ src/main/java/
 
 ### Estructura General dentro de src/main/java/avancecurricular:
 - model/
-	- Solo los modelos primarios con setter y getter. 
-	- Sin logica compleja, representa solo la estructura.
+	- Sólo los modelos primarios con setter y getter. 
+	- Sin lógica compleja, representa sólo la estructura.
 		
 - repository/
 	- Todas las operaciones relacionadas con la base de datos. Hablan con ella ÚNICAMENTE.
@@ -87,8 +78,8 @@ src/main/java/
 
 - service/
 	- Contiene la lógica, conecta la base de datos con la interfaz. 
-	- Se encarga de revisar y coordinar la información. Usa try-catch pero NUNCA imprime información.
-	- Clases acá manejan los Mapas.
+	- Se encarga de revisar y coordinar la información. Usa try-catch pero NUNCA imprime.
+	- Las clases manejan los Mapas.
 	- Nombrar las clases como "*Service.java".
 	- Ej.: "EstudiantesService.java" manejaría la lógica de crear instancias de estudiantes y ponerlos en sus respectivos mapas.
 
