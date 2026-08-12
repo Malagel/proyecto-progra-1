@@ -35,67 +35,67 @@ src/main/java/
 ## Organización
 
 ### Model Objects:
-	- Estudiante
-		RUT,
-		nombre,
-		codigoCarrera,
+- Estudiante
+	- RUT,
+	- nombre,
+	- codigoCarrera,
 		
-	- Profesor
-		RUT,
-		nombre,
+- Profesor
+	- RUT,
+	- nombre,
 		
-	- Curso
-		codigo,
-		creditos,
-		titulo,
-		prerrequisitos (List<Curso>),
+- Curso
+	- codigo,
+	- creditos,
+	- titulo,
+	- prerrequisitos (List<Curso>),
 			
-	- Carrera,
-		codigo,
-		titulo,
-		creditos, // Para saber el avance del estudiante.
+- Carrera,
+	- codigo,
+	- titulo,
+	- creditos, (Para saber el avance del estudiante)
 		
-	- RegistroAcademico // Objeto repetido por cada curso que haya cursado o curse algun estudiante.
-		curso, (referencia)
-		nota, 
-		estado, ("APROBADO", "REPROBADO", "CURSANDO")
+- RegistroAcademico (Objeto repetido por cada curso que haya cursado o curse algun estudiante)
+	- curso, (referencia)
+	- nota, 
+	- estado, ("APROBADO", "REPROBADO", "CURSANDO")
 		
 ### Maps:
-	- Relationship Maps: // Mapas con las relaciones necesarias para el programa. Sostiene solo referencias a las entidades.
-		- Map<Estudiante, List<RegistroAcademico>>
-		- Map<Profesor, List<Curso>>
-		- Map<Carrera, List<Curso>>
+- Relationship Maps: Mapas con las relaciones necesarias para el programa. Sostiene solo referencias a las entidades.
+	- Map<Estudiante, List<RegistroAcademico>>
+	- Map<Profesor, List<Curso>>
+	- Map<Carrera, List<Curso>>
 
-	- Entity Caches: // Catalogo Maestro con las entidades reales. String = Identificador 
-		- Map<String, Estudiante>
-		- Map<String, Profesor>
-		- Map<String, Curso>
-		- Map<String, Carrera>
+- Entity Caches: Catalogo Maestro con las entidades reales. String = Identificador 
+	- Map<String, Estudiante>
+	- Map<String, Profesor>
+	- Map<String, Curso>
+	- Map<String, Carrera>
 
 ### Estructura General dentro de src/main/java/avancecurricular:
-	- model/
-		- Solo los modelos primarios con setter y getter. 
-		- Sin logica compleja, representa solo la estructura.
+- model/
+	- Solo los modelos primarios con setter y getter. 
+	- Sin logica compleja, representa solo la estructura.
 		
-	- repository/
-		- Todas las operaciones relacionadas con la base de datos. Hablan con ella ÚNICAMENTE.
-		- Retornan (read) y actualizan datos (update).
-		- Usa excepciones para errores.
-		- Hay que crear un .java por cada entidad (modelos).
-		- Nombrar los objetos como *DAO (Data Access Objects).
-		- Ej.: "CursoDAO.java" manejaría el leer de la DB o actualizarla cuando el usuario quiera guardar.
+- repository/
+	- Todas las operaciones relacionadas con la base de datos. Hablan con ella ÚNICAMENTE.
+	- Retornan (read) y actualizan datos (update).
+	- Usa excepciones para errores.
+	- Hay que crear un .java por cada entidad (modelos).
+	- Nombrar los objetos como *DAO (Data Access Objects).
+	- Ej.: "CursoDAO.java" manejaría el leer de la DB o actualizarla cuando el usuario quiera guardar.
 
-	- service/
-		- Contiene la lógica, conecta la base de datos con la interfaz. 
-		- Se encarga de revisar y coordinar la información. Usa try-catch pero NUNCA imprime información.
-		- Clases acá manejan los Mapas.
-		- Nombrar las clases como "*Service.java".
-		- Ej.: "EstudiantesService.java" manejaría la lógica de crear instancias de estudiantes y ponerlos en sus respectivos mapas.
+- service/
+	- Contiene la lógica, conecta la base de datos con la interfaz. 
+	- Se encarga de revisar y coordinar la información. Usa try-catch pero NUNCA imprime información.
+	- Clases acá manejan los Mapas.
+	- Nombrar las clases como "*Service.java".
+	- Ej.: "EstudiantesService.java" manejaría la lógica de crear instancias de estudiantes y ponerlos en sus respectivos mapas.
 
-	- ui/
-		- Es la capa de interacción con el usuario.
-		- No usa ningún tipo de lógica.
-		- Se encarga de leer y mostrar errores invocados por service/
+- ui/
+	- Es la capa de interacción con el usuario.
+	- No usa ningún tipo de lógica.
+	- Se encarga de leer y mostrar errores invocados por service/
 
-	- utils/
-		- Clases con utilidades, funciones de lógica que se repiten básicamente.
+- utils/
+	- Clases con utilidades, funciones de lógica que se repiten básicamente.
