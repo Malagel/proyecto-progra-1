@@ -7,6 +7,5 @@ public class Alumno {
 	
 	private int nivelActual; 
 	
-	
-	//Falta agregar coleccion de ramos aprobados (Avance Curricular) 
+		//Falta agregar coleccion de ramos aprobados (Avance Curricular) 
 }
