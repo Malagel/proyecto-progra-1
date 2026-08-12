@@ -1,4 +1,4 @@
-package model;
+package avancecurricular.model;
 
 public class Alumno {
 	private String nombre; 

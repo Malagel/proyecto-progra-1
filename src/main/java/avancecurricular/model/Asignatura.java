@@ -1,4 +1,4 @@
-package model;
+package avancecurricular.model;
 
 /** CLASE : ASIGNATURA 
  * Dentro de esta clase se encuentran campos como clave, nombre, y nivel. 
