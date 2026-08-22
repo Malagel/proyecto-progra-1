@@ -26,46 +26,51 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 ## Organización
 
 ### Model Objects:
-- Estudiante
+
+- Persona (abstract class)
 	- RUT,
 	- nombre,
-	- codigoCarrera,
+
+- Estudiante (extends Persona)
+	- idCarrera,
+	- Set<RegistroAcademico> registrosAcademicos, 
 		
-- Profesor
-	- RUT,
-	- nombre,
+- Profesor (extends Persona)
+	- Set<Curso> cursosDictados,
 		
 - Curso
-	- codigo,
+	- id,
+	- nombre,
 	- creditos,
-	- titulo,
-	- prerrequisitos (List<Curso>),
-			
+
+- AsignaturaMalla (interseccion de Curso y Carrera, para que cada carrera pueda tener distintas organizaciones)
+	- curso, (referencia al curso),
+	- numeroSemestre,
+	- Set<Curso> prerrequisitos,
+
 - Carrera,
-	- codigo,
-	- titulo,
-	- creditos, (Para saber el avance del estudiante)
+	- id,
+	- nombre,
+	- creditosTotales, (Para saber el avance del estudiante)
+	- Set<AsignaturaMalla> planDeEstudio 
 		
-- RegistroAcademico (Objeto repetido por cada curso que haya cursado o curse algun estudiante)
+- RegistroAcademico	
 	- curso, (referencia)
 	- nota, 
 	- estado, ("APROBADO", "REPROBADO", "CURSANDO")
 		
 ### Maps:
-- Relationship Maps: Mapas con las relaciones necesarias para el programa. Sostiene solo referencias a las entidades.
-	- Map<Estudiante, List<RegistroAcademico>>
-	- Map<Profesor, List<Curso>>
-	- Map<Carrera, List<Curso>>
 
-- Entity Caches: Catálogo Maestro con las entidades reales. String = Identificador 
+- Entity Caches (probablemente tendra su propia clase): Catálogo Maestro con las entidades reales. String = Identificador 
+	(Hacer cuenta que desde la DB se cargará la información en los mapas, luego al cerrar el programa pasará de los mapas a la DB)
 	- Map<String, Estudiante>
 	- Map<String, Profesor>
 	- Map<String, Curso>
 	- Map<String, Carrera>
 
-### Estructura General dentro de src/main/java/avancecurricular:
+### Estructura General de Carpetas dentro de src/main/java/avancecurricular:
 - model/
-	- Sólo los modelos primarios con setter y getter. 
+	- Sólo los modelos primarios con setter, getter y métodos de lógica integral interna . 
 	- Sin lógica compleja, representa sólo la estructura.
 		
 - repository/
@@ -81,7 +86,7 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 	- Se encarga de revisar y coordinar la información. Usa try-catch pero NUNCA imprime.
 	- Las clases manejan los Mapas.
 	- Nombrar las clases como "*Service.java".
-	- Ej.: "EstudiantesService.java" manejaría la lógica de crear instancias de estudiantes y ponerlos en sus respectivos mapas.
+	- Ej.: "EstudianteService.java" manejaría la lógica de crear instancias de estudiantes y ponerlos en sus respectivos mapas.
 
 - ui/
 	- Es la capa de interacción con el usuario.
