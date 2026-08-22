@@ -1,45 +1,57 @@
 package avancecurricular.model;
 
-/** CLASE : Curso 
- * Dentro de esta clase se encuentran campos como clave, nombre, y nivel. 
- * Estas sirven para identificar a cada asignatura 
-**/
+import java.util.Objects;
 
 public class Curso {
-	private String clave; 
-	private String nombre;
-	private int nivel; 
-	
-	public Curso(String clave, String nombre, int nivel){
-		this.clave = clave; 
-		this.nombre = nombre; 
-		this.nivel = nivel; 
+    private final String id;
+    private String nombre;
+    private int creditos;
+
+    public Curso(String id, String nombre, int creditos) {
+        this.id = Objects.requireNonNull(id, "El ID no puede ser nulo");
+
+        setNombre(nombre);
+        setCreditos(creditos);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+	public int getCreditos() {
+		return creditos;
 	}
-	
-	/**
-	 * Getters y Setters para los campos de Asignatura.
-	 * Estos permiten solicitar o modificar los datos de manera externa a la clase.
-	 * 
-	 */
-	
-	public String getClave() {
-		return clave;
-	}
-	public void setClave(String clave) {
-		this.clave = clave;
-	}
-	public String getNombre () {
-		return nombre;
-	}
-	public void setNombre (String nombre) {
-		this.nombre = nombre; 
-	}
-	public int getNivel() {
-		return nivel;
-	}
-	public void setNivel (int nivel) {
-		this.nivel = nivel;
-	}
+
+    public final void setNombre(String nombre) {
+        this.nombre = Objects.requireNonNull(nombre, "El nombre no puede ser nulo");
+    }
+
+    public final void setCreditos(int creditos) {
+        if (creditos <= 0) {
+            throw new IllegalArgumentException("Los créditos no pueden ser menores o igual a cero.");
+        }
+        this.creditos = creditos;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Curso curso = (Curso) o;
+        return Objects.equals(id, curso.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%s] %s (%d créditos)", id, nombre, creditos);
+    }
 }
-
-
