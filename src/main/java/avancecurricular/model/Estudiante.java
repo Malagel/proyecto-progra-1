@@ -1,11 +1,17 @@
 package avancecurricular.model;
 
-public class Estudiante {
-	private String nombre; 
-	private String rut; 
-	private int edad;
+public class Estudiante extends Persona{
+	private String idCarrera;
+	private Set<RegistroAcademico> registrosAcademicos;
 	
-	private int nivelActual; 
 	
-		//Falta agregar coleccion de ramos aprobados (Avance Curricular) 
+	public Estudiante (string rut, String nombre, String idCarrera) {
+		super(rut, nombre);
+		this.idCarrera = idCarrera;
+		this.registrosAcademicos =  new HashSet<>();
+	}
+	
+	
+	
+
 }
