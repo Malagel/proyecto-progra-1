@@ -12,7 +12,7 @@ public class AsignaturaMalla {
     
     public AsignaturaMalla(Curso curso, int numeroSemestre) {
         this.curso = Objects.requireNonNull(curso, "El curso no puede ser nulo");
-        prerrequisitos = new HashSet<>();
+        this.prerrequisitos = new HashSet<>();
 
         setNumeroSemestre(numeroSemestre);
     }
@@ -24,28 +24,28 @@ public class AsignaturaMalla {
             throw new IllegalArgumentException("No es posible agregar a un curso como su mismo prerrequisito");
         }
 
-        prerrequisitos.add(curso);
+        this.prerrequisitos.add(curso);
     }
 
     public void removePrerrequisito(Curso curso) {
-        if (!prerrequisitos.remove(curso)) {
+        if (!this.prerrequisitos.remove(curso)) {
             throw new IllegalArgumentException("No se puede remover prerrequisito. No existe o es nulo.");
         }
     }
     public Curso getCurso() {
-        return curso;
+        return this.curso;
     }
 
     public int getNumeroSemestre() { 
-        return numeroSemestre; 
+        return this.numeroSemestre; 
     }
 
     public Set<Curso> getPrerrequisitos() {
-        return Collections.unmodifiableSet(prerrequisitos);
+        return Collections.unmodifiableSet(this.prerrequisitos);
     }
 
     public final void setNumeroSemestre(int numeroSemestre) {
-        if (numeroSemestre <= 0) {
+        if (this.numeroSemestre <= 0) {
             throw new IllegalArgumentException("El número del semestre no puede ser menor o igual a cero.");
         }
         this.numeroSemestre = numeroSemestre;
@@ -67,6 +67,6 @@ public class AsignaturaMalla {
     @Override
     public String toString() {
         return String.format("Semestre %d: %s (Prerrequisitos: %d)", 
-                numeroSemestre, curso.getNombre(), prerrequisitos.size());
+                this.numeroSemestre, this.curso.getNombre(), this.prerrequisitos.size());
     }
 }
