@@ -32,7 +32,7 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 	- nombre,
 
 - Estudiante (extends Persona)
-	- idCarrera,
+	- carrera (referencia),
 	- Set<RegistroAcademico> registrosAcademicos, 
 		
 - Profesor (extends Persona)
