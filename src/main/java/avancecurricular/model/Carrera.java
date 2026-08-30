@@ -30,7 +30,7 @@ public class Carrera {
     	}
     }
     
-    public String getID () {
+    public String getId () {
     	return id;
     }
     
