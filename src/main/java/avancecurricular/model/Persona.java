@@ -1,36 +1,32 @@
 package avancecurricular.model;
 
-public abstract class Persona {
-	private final String rut;
-	private String nombre;
-	// constructor
-	public Persona (String rut, String nombre) {
-		this.rut = rut;
-		this.nombre  = nombre;
-	}
-	 public persona (){
-		rut = "No definido";
-		nombre = "No definido";
-	 }
-    // getters y setters
-	public void SetRut (String rut) {
-		this.rut = rut; 
-	}
-	
-	public void SetNombre (String nombre) {
-		this.nombre = nombre;
-	}
-	
-	public String GetRut () {
-		return rut;
-	}
-	public String GetNombre () {
-		return nombre;
-	}
+import java.util.Objects;
 
-	// metodos de  identidad 
-	
-	@Override
+public abstract class Persona {
+    private final String rut;
+    private String nombre;
+
+    public Persona(String rut, String nombre) {
+        if (rut == null || rut.isEmpty()) {
+            throw new IllegalArgumentException("El RUT no puede ser nulo ni vacío.");
+        }
+        this.rut = rut;
+        this.nombre = nombre;
+    }
+
+    public String getRut() {
+        return this.rut;
+    }
+
+    public String getNombre() {
+        return this.nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -45,10 +41,6 @@ public abstract class Persona {
 
     @Override
     public String toString() {
-        return "Persona{" +
-                "rut='" + rut + '\'' +
-                ", nombre='" + nombre + '\'' +
-                '}';
+        return "Persona{rut='" + rut + "', nombre='" + nombre + "'}";
     }
-
-} 
+}
