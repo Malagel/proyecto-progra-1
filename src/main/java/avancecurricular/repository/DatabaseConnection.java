@@ -10,6 +10,11 @@ public class DatabaseConnection {
     private DatabaseConnection() {}
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL);
+        Connection conn = DriverManager.getConnection(URL);
+        
+        try (java.sql.Statement stmt = conn.createStatement()) {
+            stmt.execute("PRAGMA foreign_keys = ON;");
+        }
+        return conn;
     }
 }
