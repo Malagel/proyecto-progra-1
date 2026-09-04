@@ -104,12 +104,6 @@ public class EstudianteDAO {
     }
 
     public void eliminarEstudiante(String rut, Connection conn) throws SQLException {
-        String sqlNotas = "DELETE FROM registros_academicos WHERE rut_estudiante = ?";
-        try (PreparedStatement stmtNotas = conn.prepareStatement(sqlNotas)) {
-            stmtNotas.setString(1, rut);
-            stmtNotas.executeUpdate();
-        }
-
         String sqlEstudiante = "DELETE FROM estudiantes WHERE rut = ?";
         try (PreparedStatement stmtEst = conn.prepareStatement(sqlEstudiante)) {
             stmtEst.setString(1, rut);
