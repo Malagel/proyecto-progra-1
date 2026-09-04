@@ -1,5 +1,8 @@
 package avancecurricular.repository;
 
+import avancecurricular.model.Estudiante;
+import avancecurricular.model.RegistroAcademico;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -78,5 +81,74 @@ public class EstudianteDAO {
         return filas;
     }
 
-    // faltan los demas metodos para insertar... eliminar... etc. DEBEN SER USADOS DENTRO DEL SERVIC por el UoW.
+    public void insertarEstudiante(Estudiante estudiante, Connection conn) throws SQLException {
+        String sql = "INSERT INTO estudiantes (rut, nombre, id_carrera) VALUES (?, ?, ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, estudiante.getRut());
+            stmt.setString(2, estudiante.getNombre());
+            stmt.setString(3, estudiante.getCarrera().getId());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void actualizarEstudiante(Estudiante estudiante, Connection conn) throws SQLException {
+        String sql = "UPDATE estudiantes SET nombre = ?, id_carrera = ? WHERE rut = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, estudiante.getNombre());
+            stmt.setString(2, estudiante.getCarrera().getId());
+            stmt.setString(3, estudiante.getRut());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void eliminarEstudiante(String rut, Connection conn) throws SQLException {
+        String sqlNotas = "DELETE FROM registros_academicos WHERE rut_estudiante = ?";
+        try (PreparedStatement stmtNotas = conn.prepareStatement(sqlNotas)) {
+            stmtNotas.setString(1, rut);
+            stmtNotas.executeUpdate();
+        }
+
+        String sqlEstudiante = "DELETE FROM estudiantes WHERE rut = ?";
+        try (PreparedStatement stmtEst = conn.prepareStatement(sqlEstudiante)) {
+            stmtEst.setString(1, rut);
+            stmtEst.executeUpdate();
+        }
+    }
+
+    public void insertarRegistro(String rutEstudiante, RegistroAcademico registro, Connection conn) throws SQLException {
+        String sql = "INSERT INTO registros_academicos (rut_estudiante, id_curso, nota, estado) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, rutEstudiante);
+            stmt.setString(2, registro.getCurso().getId());
+            stmt.setDouble(3, registro.getNota());
+            stmt.setString(4, registro.getEstado());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void actualizarRegistro(String rutEstudiante, RegistroAcademico registro, Connection conn) throws SQLException {
+        String sql = "UPDATE registros_academicos SET nota = ?, estado = ? WHERE rut_estudiante = ? AND id_curso = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDouble(1, registro.getNota());
+            stmt.setString(2, registro.getEstado());
+            stmt.setString(3, rutEstudiante);
+            stmt.setString(4, registro.getCurso().getId());
+            stmt.executeUpdate();
+        }
+    }
+
+
+    public void eliminarRegistro(String rutEstudiante, String idCurso, Connection conn) throws SQLException {
+        String sql = "DELETE FROM registros_academicos WHERE rut_estudiante = ? AND id_curso = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, rutEstudiante);
+            stmt.setString(2, idCurso);
+            stmt.executeUpdate();
+        }
+    }
 }
