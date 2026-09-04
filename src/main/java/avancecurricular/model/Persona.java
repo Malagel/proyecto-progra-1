@@ -7,10 +7,7 @@ public abstract class Persona {
     private String nombre;
 
     public Persona(String rut, String nombre) {
-        if (rut == null || rut.isEmpty()) {
-            throw new IllegalArgumentException("El RUT no puede ser nulo ni vacío.");
-        }
-        this.rut = rut;
+        this.rut = Objects.requireNonNull(rut, "El RUT no puede ser Nulo");
         this.nombre = nombre;
     }
 
