@@ -46,12 +46,19 @@ public class EstudianteService {
 
             if (estudiante != null && cursoReal != null) {
                 RegistroAcademico registro = new RegistroAcademico(cursoReal, fila.getNota(), fila.getEstado());
-                estudiante.getRegistrosAcademicos().add(registro);
+                estudiante.addRegistroAcademico(registro);
             }
         }
     }
 
+    public java.util.Collection<Estudiante> obtenerTodos() {
+        return java.util.Collections.unmodifiableCollection(this.estudiantes.values());
+    }
+
     public void registrarEstudiante(Estudiante estudiante) {
+        if (this.estudiantes.containsKey(estudiante.getRut()))
+            throw new IllegalArgumentException("El RUT del estudiante que se intenta agregar ya existe.");
+
         this.estudiantes.put(estudiante.getRut(), estudiante);
 
         this.unitOfWork.registrarAccion(conn -> this.estudianteDAO.insertarEstudiante(estudiante, conn));
@@ -61,5 +68,45 @@ public class EstudianteService {
         this.estudiantes.remove(rut);
 
         this.unitOfWork.registrarAccion(conn -> this.estudianteDAO.eliminarEstudiante(rut, conn));
+    }
+
+    public void agregarRegistro(String rut, Curso curso) {
+        Estudiante est = buscarPorRut(rut);
+        int tamañoPrevio = est.getRegistrosAcademicos().size();
+        RegistroAcademico nuevo = est.inscribirCurso(curso);
+        
+        if (est.getRegistrosAcademicos().size() == tamañoPrevio) {
+            throw new IllegalStateException("El estudiante ya tiene inscrito el curso.");
+        }
+        this.unitOfWork.registrarAccion(conn -> this.estudianteDAO.insertarRegistro(rut, nuevo, conn));
+    }
+
+    public Estudiante buscarPorRut(String rut) {
+        if (rut == null || rut.trim().isEmpty()) {
+            throw new IllegalArgumentException("El RUT no puede ser nulo ni estar vacío.");
+        }
+
+        Estudiante est = this.estudiantes.get(rut);
+        if (est == null) {
+            throw new IllegalArgumentException("No se encontró ningún estudiante con el RUT: " + rut);
+        }
+
+        return est;
+    }
+
+    public void actualizarRegistro(String rut, RegistroAcademico nuevoRegistro) {
+        Estudiante est = buscarPorRut(rut);
+        
+        RegistroAcademico antiguo = est.getRegistrosAcademicos().stream()
+            .filter(r -> r.getCurso().equals(nuevoRegistro.getCurso()))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("El estudiante no cursa esta asignatura."));
+            
+        
+        est.removeRegistroAcademico(antiguo);
+        est.addRegistroAcademico(nuevoRegistro);
+        
+        
+        this.unitOfWork.registrarAccion(conn -> this.estudianteDAO.actualizarRegistro(rut, nuevoRegistro, conn));
     }
 }
