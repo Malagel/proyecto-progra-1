@@ -57,19 +57,8 @@ public class RegistroAcademico {
         return this.nota;
     }
 
-    public void setNota(double nota) {
-        validarNota(nota, this.estado);
-        this.nota = nota;
-    }
-
     public String getEstado() {
         return this.estado;
-    }
-
-    public void setEstado(String estado) {
-        validarEstado(estado);
-        validarNota(this.nota, estado);
-        this.estado = estado.toUpperCase().trim();
     }
 
     @Override
