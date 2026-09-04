@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Estudiante extends Persona {
-
     private final Carrera carrera;
     private final Set<RegistroAcademico> registrosAcademicos;
 
@@ -33,6 +32,48 @@ public class Estudiante extends Persona {
 
     public Set<RegistroAcademico> getRegistrosAcademicos() {
         return Collections.unmodifiableSet(this.registrosAcademicos);
+    }
+
+    public boolean cumplePrerrequisitosPara(Curso cursoDeseado) {
+        AsignaturaMalla asignaturaMalla = null;
+        for (AsignaturaMalla am : this.carrera.getPlanDeEstudio()) {
+            if (am.getCurso().equals(cursoDeseado)) {
+                asignaturaMalla = am;
+                break;
+            }
+        }
+
+        if (asignaturaMalla == null) {
+            return false; 
+        }
+
+        for (Curso prerrequisito : asignaturaMalla.getPrerrequisitos()) {
+            boolean aprobado = false;
+            
+            for (RegistroAcademico miRegistro : this.registrosAcademicos) {
+                if (miRegistro.getCurso().equals(prerrequisito) && miRegistro.esAprobado()) {
+                    aprobado = true;
+                    break;
+                }
+            }
+            
+            if (!aprobado) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public RegistroAcademico inscribirCurso(Curso curso) {
+        if (!cumplePrerrequisitosPara(curso)) {
+            throw new IllegalStateException("No cumple los prerrequisitos para inscribir: " + curso.getNombre());
+        }
+        
+        RegistroAcademico nuevoRegistro = new RegistroAcademico(curso, 0.0, RegistroAcademico.ESTADO_CURSANDO);
+        this.registrosAcademicos.add(nuevoRegistro);
+
+        return nuevoRegistro;
     }
 
     public Carrera getCarrera() {
