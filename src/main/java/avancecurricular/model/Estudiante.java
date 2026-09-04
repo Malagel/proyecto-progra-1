@@ -42,7 +42,7 @@ public class Estudiante extends Persona {
     @Override
     public String toString() {
         return "Estudiante{" +
-                "rut='" + getRUT() + '\'' +
+                "rut='" + getRut() + '\'' +
                 ", nombre='" + getNombre() + '\'' +
                 ", carrera=" + (carrera != null ? carrera.getNombre() : "Sin Carrera") +
                 ", totalRegistros=" + registrosAcademicos.size() +
