@@ -2,6 +2,8 @@ package avancecurricular.service;
 
 import avancecurricular.model.Curso;
 import avancecurricular.model.Estudiante;
+import avancecurricular.model.RegistroAcademico;
+import avancecurricular.model.Carrera;
 import avancecurricular.repository.EstudianteDAO;
 import avancecurricular.repository.EstudianteDAO.FilaEstudiante;
 import avancecurricular.repository.EstudianteDAO.FilaNota;
@@ -33,7 +35,7 @@ public class EstudianteService {
             Carrera carreraReal = carreraService.buscarPorId(fila.getIdCarrera());
             
             Estudiante estudiante = new Estudiante(fila.getRut(), fila.getNombre(), carreraReal, new HashSet<>());
-            this.estudiantes.put(estudiante.getRUT(), estudiante);
+            this.estudiantes.put(estudiante.getRut(), estudiante);
         }
 
         List<FilaNota> filasNotas = estudianteDAO.extraerNotas(conn);
@@ -50,14 +52,14 @@ public class EstudianteService {
     }
 
     public void registrarEstudiante(Estudiante estudiante) {
-        this.estudiantes.put(estudiante.getRUT(), estudiante);
+        this.estudiantes.put(estudiante.getRut(), estudiante);
 
-        this.unitOfWork.registrarAccion(conn -> this.estudianteDAO.insertar(estudiante, conn));
+        this.unitOfWork.registrarAccion(conn -> this.estudianteDAO.insertarEstudiante(estudiante, conn));
     }   
 
     public void eliminarEstudiante(String rut) {
         this.estudiantes.remove(rut);
 
-        this.unitOfWork.registrarAccion(conn -> this.estudianteDAO.eliminar(rut, conn));
+        this.unitOfWork.registrarAccion(conn -> this.estudianteDAO.eliminarEstudiante(rut, conn));
     }
-}`
+}
