@@ -29,6 +29,10 @@ public class Carrera {
     		throw new IllegalArgumentException("No se puede remover la asignatura. No existe");
     	}
     }
+
+    public Set<AsignaturaMalla> getPlanDeEstudio(){
+    	return Collections.unmodifiableSet(this.planDeEstudio);
+    }
     
     public String getId () {
     	return id;
@@ -41,11 +45,6 @@ public class Carrera {
     public int getCreditosTotales() {
     	return creditosTotales;
     }
-    
-    public Set<AsignaturaMalla> getPlanDeEstudio(){
-    	return Collections.unmodifiableSet(this.planDeEstudio);
-    }
-    
 	
 	public final void setNombre(String nombre) {
         this.nombre = Objects.requireNonNull(nombre, "El nombre no puede ser nulo");
