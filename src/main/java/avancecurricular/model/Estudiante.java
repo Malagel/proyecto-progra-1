@@ -21,6 +21,7 @@ public class Estudiante extends Persona {
         this.registrosAcademicos = (registros != null) ? new HashSet<>(registros) : new HashSet<>();
     }
 
+    // agregar registro sin verificacion
     public void addRegistroAcademico(RegistroAcademico registro) {
         Objects.requireNonNull(registro, "El registro académico no puede ser nulo.");
         this.registrosAcademicos.add(registro);
