@@ -32,6 +32,13 @@ public class AppConsola {
             contexto.getProfesorService(),
             contexto.getCursoService()
         );
+        
+        new ControladorEstudiante(
+        	    vistaEstudiante,
+        	    contexto.getEstudianteService(),
+        	    contexto.getCarreraService(),
+        	    contexto.getCursoService()
+        	);
 
         new ControladorPrincipal(
             vistaPrincipal,
