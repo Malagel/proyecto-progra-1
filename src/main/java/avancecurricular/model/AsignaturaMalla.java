@@ -45,7 +45,7 @@ public class AsignaturaMalla {
     }
 
     public final void setNumeroSemestre(int numeroSemestre) {
-        if (this.numeroSemestre <= 0) {
+        if (numeroSemestre <= 0) {
             throw new IllegalArgumentException("El número del semestre no puede ser menor o igual a cero.");
         }
         this.numeroSemestre = numeroSemestre;
