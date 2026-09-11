@@ -14,8 +14,7 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 ## Cómo ejecutar
 
 1. Clonar el repositorio.
-2. Abrir la carpeta como proyecto en Eclipse (con JDK 11 configurado).
-3. Usar comando: mvn clean compile exec:java
+2. Usar comando: mvn clean compile exec:java
 
 ## Integrantes
 
