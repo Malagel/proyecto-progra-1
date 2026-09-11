@@ -62,4 +62,14 @@ public class CursoDAO {
             stmt.executeUpdate();
         }
     }
+
+    public void actualizarCurso(Curso curso, Connection conn) throws SQLException {
+        String sql = "UPDATE cursos SET nombre = ?, creditos = ? WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, curso.getNombre());
+            stmt.setInt(2, curso.getCreditos());
+            stmt.setString(3, curso.getId());
+            stmt.executeUpdate();
+        }
+    }
 }
