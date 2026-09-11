@@ -118,7 +118,7 @@ public class EstudianteService {
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("El estudiante no tiene inscrito este curso."));
             
-        est.removeRegistroAcademico(registro); // Mutación en RAM
+        est.removeRegistroAcademico(registro);
         
         this.unitOfWork.registrarAccion(conn -> 
             this.estudianteDAO.eliminarRegistro(rut, curso.getId(), conn)
