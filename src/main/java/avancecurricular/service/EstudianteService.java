@@ -109,4 +109,19 @@ public class EstudianteService {
         
         this.unitOfWork.registrarAccion(conn -> this.estudianteDAO.actualizarRegistro(rut, nuevoRegistro, conn));
     }
+
+    public void desinscribirCurso(String rut, Curso curso) {
+        Estudiante est = buscarPorRut(rut);
+        
+        RegistroAcademico registro = est.getRegistrosAcademicos().stream()
+            .filter(r -> r.getCurso().equals(curso))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("El estudiante no tiene inscrito este curso."));
+            
+        est.removeRegistroAcademico(registro); // Mutación en RAM
+        
+        this.unitOfWork.registrarAccion(conn -> 
+            this.estudianteDAO.eliminarRegistro(rut, curso.getId(), conn)
+        );
+    }
 }
