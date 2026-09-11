@@ -85,6 +85,14 @@ public class CursoService {
         this.unitOfWork.registrarAccion(conn -> this.cursoDAO.eliminarCurso(id, conn));
     }
 
+    public void actualizarCurso(String id, String nuevoNombre, int nuevosCreditos) {
+        Curso curso = buscarPorId(id);
+        curso.setNombre(nuevoNombre);
+        curso.setCreditos(nuevosCreditos);
+        
+        this.unitOfWork.registrarAccion(conn -> this.cursoDAO.actualizarCurso(curso, conn));
+    }
+
     public Curso buscarPorId(String id) {
         Curso curso = this.cursos.get(id);
         if (curso == null) {
