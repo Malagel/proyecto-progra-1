@@ -21,7 +21,6 @@ public class Estudiante extends Persona {
         this.registrosAcademicos = (registros != null) ? new HashSet<>(registros) : new HashSet<>();
     }
 
-    // agregar registro sin verificacion
     public void addRegistroAcademico(RegistroAcademico registro) {
         Objects.requireNonNull(registro, "El registro académico no puede ser nulo.");
         this.registrosAcademicos.add(registro);
@@ -77,6 +76,19 @@ public class Estudiante extends Persona {
         return nuevoRegistro;
     }
 
+    public int obtenerCreditosAprobados() {
+        return this.registrosAcademicos.stream()
+            .filter(RegistroAcademico::esAprobado)
+            .mapToInt(registro -> registro.getCurso().getCreditos())
+            .sum();
+    }
+
+    public double calcularPorcentajeAvance() {
+        int requeridos = this.carrera.getCreditosTotales();
+        if (requeridos == 0) return 0.0;
+        return ((double) obtenerCreditosAprobados() / requeridos) * 100.0;
+    }
+    
     public Carrera getCarrera() {
         return this.carrera;
     }
