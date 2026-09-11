@@ -92,6 +92,15 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 	- Es la capa de interacción con el usuario.
 	- No usa ningún tipo de lógica.
 	- Se encarga de leer y mostrar errores invocados por service/
+	- se divide en: 
+	
+	# TODO
+		view/
+		controller/
+		console/
+		gui/
 
 - utils/
 	- Clases con utilidades, funciones de lógica que se repiten básicamente.
+
+-
