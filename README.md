@@ -15,7 +15,7 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 
 1. Clonar el repositorio.
 2. Abrir la carpeta como proyecto en Eclipse (con JDK 11 configurado).
-3. Ejecutar la clase `app.Main` como Java Application.
+3. Usar comando: mvn clean compile exec:java
 
 ## Integrantes
 
@@ -103,4 +103,4 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 - utils/
 	- Clases con utilidades, funciones de lógica que se repiten básicamente.
 
--
+
