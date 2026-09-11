@@ -61,6 +61,44 @@ public class CarreraService {
         }
     }
 
+    public void agregarAsignaturaMalla(String idCarrera, Curso curso, int semestre) {
+        Carrera carrera = buscarPorId(idCarrera);
+        if (carrera == null) {
+            throw new IllegalArgumentException("La carrera no existe.");
+        }
+        
+        boolean yaExiste = carrera.getPlanDeEstudio().stream()
+                .anyMatch(am -> am.getCurso().equals(curso));
+        if (yaExiste) {
+            throw new IllegalStateException("El curso ya pertenece a la malla de esta carrera.");
+        }
+
+        AsignaturaMalla nuevaAsignatura = new AsignaturaMalla(curso, semestre);
+        carrera.addAsignatura(nuevaAsignatura);
+
+        this.unitOfWork.registrarAccion(conn -> 
+            this.carreraDAO.insertarAsignaturaMalla(idCarrera, nuevaAsignatura, conn)
+        );
+    }
+
+    public void agregarPrerrequisito(String idCarrera, String idCursoDestino, Curso cursoPre) {
+        Carrera carrera = buscarPorId(idCarrera);
+        if (carrera == null) {
+            throw new IllegalArgumentException("La carrera no existe.");
+        }
+
+        AsignaturaMalla asignaturaMalla = carrera.getPlanDeEstudio().stream()
+                .filter(am -> am.getCurso().getId().equals(idCursoDestino))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("El curso destino no está en la malla de esta carrera."));
+
+        asignaturaMalla.addPrerrequisito(cursoPre);
+
+        this.unitOfWork.registrarAccion(conn -> 
+            this.carreraDAO.insertarPrerrequisito(idCarrera, idCursoDestino, cursoPre.getId(), conn)
+        );
+    }
+
     public java.util.Collection<Carrera> obtenerTodas() {
         return java.util.Collections.unmodifiableCollection(this.carreras.values());
     }
