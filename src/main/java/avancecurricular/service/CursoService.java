@@ -1,5 +1,6 @@
 package avancecurricular.service;
 
+import avancecurricular.exception.EntidadNoEncontradaException;
 import avancecurricular.model.AsignaturaMalla;
 import avancecurricular.model.Carrera;
 import avancecurricular.model.Curso;
@@ -49,6 +50,11 @@ public class CursoService {
         this.unitOfWork.registrarAccion(conn -> this.cursoDAO.insertarCurso(curso, conn));
     }
 
+    public void registrarCurso(String id, String nombre, int creditos) {
+        Curso nuevoCurso = new Curso(id, nombre, creditos);
+        this.registrarCurso(nuevoCurso); // Llama al método original
+    }
+
     public void eliminarCurso(String id, CarreraService carreraService, EstudianteService estudianteService, ProfesorService profesorService) {
         if (!this.cursos.containsKey(id)) {
             throw new IllegalArgumentException("El curso no existe.");
@@ -96,7 +102,7 @@ public class CursoService {
     public Curso buscarPorId(String id) {
         Curso curso = this.cursos.get(id);
         if (curso == null) {
-            throw new IllegalArgumentException("No se encontró ningún curso con el ID: " + id);
+            throw new EntidadNoEncontradaException("No se encontró ningún curso con el ID: " + id);
         }
         return curso;
     }

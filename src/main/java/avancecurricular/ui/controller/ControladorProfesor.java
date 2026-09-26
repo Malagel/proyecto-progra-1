@@ -24,8 +24,7 @@ public class ControladorProfesor {
 
     public void onAgregarProfesor(String rut, String nombre) {
         try {
-            Profesor nuevo = new Profesor(rut, nombre);
-            profesorService.registrarProfesor(nuevo);
+            profesorService.registrarProfesor(rut, nombre);
             vista.mostrarMensaje("Profesor registrado con éxito.");
             onSolicitarListaProfesores();
         } catch (RuntimeException e) {
