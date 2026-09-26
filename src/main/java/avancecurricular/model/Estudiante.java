@@ -1,5 +1,6 @@
 package avancecurricular.model;
 
+import avancecurricular.exception.PrerrequisitoNoCumplidoException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -67,7 +68,7 @@ public class Estudiante extends Persona {
 
     public RegistroAcademico inscribirCurso(Curso curso) {
         if (!cumplePrerrequisitosPara(curso)) {
-            throw new IllegalStateException("No cumple los prerrequisitos para inscribir: " + curso.getNombre());
+            throw new PrerrequisitoNoCumplidoException("No cumple los prerrequisitos para inscribir: " + curso.getNombre());        
         }
         
         RegistroAcademico nuevoRegistro = new RegistroAcademico(curso, 0.0, RegistroAcademico.ESTADO_CURSANDO);

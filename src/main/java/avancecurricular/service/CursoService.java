@@ -1,5 +1,6 @@
 package avancecurricular.service;
 
+import avancecurricular.exception.EntidadNoEncontradaException;
 import avancecurricular.model.AsignaturaMalla;
 import avancecurricular.model.Carrera;
 import avancecurricular.model.Curso;
@@ -96,7 +97,7 @@ public class CursoService {
     public Curso buscarPorId(String id) {
         Curso curso = this.cursos.get(id);
         if (curso == null) {
-            throw new IllegalArgumentException("No se encontró ningún curso con el ID: " + id);
+            throw new EntidadNoEncontradaException("No se encontró ningún curso con el ID: " + id);
         }
         return curso;
     }
