@@ -34,8 +34,7 @@ public class ControladorCurso {
 
     public void onAgregarCurso(String id, String nombre, int creditos) {
         try {
-            Curso nuevo = new Curso(id, nombre, creditos);
-            cursoService.registrarCurso(nuevo);
+            cursoService.registrarCurso(id, nombre, creditos);
             vista.mostrarMensaje("Curso '" + nombre + "' registrado con éxito.");
             onSolicitarListaCursos();
         } catch (RuntimeException e) {

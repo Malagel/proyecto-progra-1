@@ -50,6 +50,11 @@ public class CursoService {
         this.unitOfWork.registrarAccion(conn -> this.cursoDAO.insertarCurso(curso, conn));
     }
 
+    public void registrarCurso(String id, String nombre, int creditos) {
+        Curso nuevoCurso = new Curso(id, nombre, creditos);
+        this.registrarCurso(nuevoCurso); // Llama al método original
+    }
+
     public void eliminarCurso(String id, CarreraService carreraService, EstudianteService estudianteService, ProfesorService profesorService) {
         if (!this.cursos.containsKey(id)) {
             throw new IllegalArgumentException("El curso no existe.");

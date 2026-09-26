@@ -72,8 +72,13 @@ public class ProfesorService {
         this.unitOfWork.registrarAccion(conn -> this.profesorDAO.insertarProfesor(profesor, conn));
     }
 
+    public void registrarProfesor(String rut, String nombre) {
+        Profesor nuevoProfesor = new Profesor(rut, nombre);
+        this.registrarProfesor(nuevoProfesor);
+    }
+
     public void eliminarProfesor(String rut) {
-        Profesor profesor = buscarPorRut(rut); // Reutilizamos el método para validar que exista
+        Profesor profesor = buscarPorRut(rut);
         
         this.profesores.remove(profesor.getRut());
         this.unitOfWork.registrarAccion(conn -> this.profesorDAO.eliminarProfesor(rut, conn));
