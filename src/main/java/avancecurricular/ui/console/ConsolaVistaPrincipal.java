@@ -27,24 +27,15 @@ public class ConsolaVistaPrincipal implements VistaPrincipal {
             int opcion = LectorConsola.leerEntero("> ");
 
             switch (opcion) {
-                case 1:
-                    controlador.onNavegarACursos();
+                case 1: controlador.onNavegarACursos(); break;
+                case 2: controlador.onNavegarACarreras(); break;
+                case 3: controlador.onNavegarAProfesores(); break;
+                case 4: controlador.onNavegarAEstudiantes();break;
+                case 0: 
+                    ejecutando = false; 
+                    System.out.println("Cerrando la aplicación..."); 
                     break;
-                case 2:
-                    controlador.onNavegarACarreras();
-                    break;
-                case 3:
-                    controlador.onNavegarAProfesores();
-                    break;
-                case 4:
-                    controlador.onNavegarAEstudiantes();
-                    break;
-                case 0:
-                    ejecutando = false;
-                    System.out.println("Cerrando la aplicación...");
-                    break;
-                default:
-                    System.out.println("[!] Opción no válida.");
+                default: System.out.println("[!] Opción no válida.");
             }
         }
     }

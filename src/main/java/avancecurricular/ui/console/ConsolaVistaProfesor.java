@@ -31,29 +31,14 @@ public class ConsolaVistaProfesor implements VistaProfesor {
 
             int opcion = LectorConsola.leerEntero("> ");
             switch (opcion) {
-                case 1:
-                    controlador.onSolicitarListaProfesores();
-                    break;
-                case 2:
-                    formularioAgregarProfesor();
-                    break;
-                case 3:
-                    formularioEliminarProfesor();
-                    break;
-                case 4:
-                    formularioAsignarCurso();
-                    break;
-                case 5:
-                    formularioRemoverCurso();
-                    break;
-                case 6:
-                    formularioVerCursos();
-                    break;
-                case 0:
-                    enSubmenu = false;
-                    break;
-                default:
-                    System.out.println("[!] Opción inválida.");
+                case 1: controlador.onSolicitarListaProfesores(); break;
+                case 2: formularioAgregarProfesor(); break;
+                case 3: formularioEliminarProfesor(); break;
+                case 4: formularioAsignarCurso(); break;
+                case 5: formularioRemoverCurso(); break;
+                case 6: formularioVerCursos(); break;
+                case 0: enSubmenu = false; break;
+                default: System.out.println("[!] Opción inválida.");
             }
         }
     }
