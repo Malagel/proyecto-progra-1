@@ -23,25 +23,18 @@ public class ConsolaVistaCurso implements VistaCurso {
             System.out.println("1. Listar todos los cursos");
             System.out.println("2. Registrar nuevo curso");
             System.out.println("3. Eliminar un curso");
+            System.out.println("4 Modificar un curso");
             System.out.println("0. Volver al menú principal");
 
             int opcion = LectorConsola.leerEntero("> ");
 
             switch (opcion) {
-                case 1:
-                    controlador.onSolicitarListaCursos();
-                    break;
-                case 2:
-                    formularioAgregarCurso();
-                    break;
-                case 3:
-                    formularioEliminarCurso();
-                    break;
-                case 0:
-                    enSubmenu = false;
-                    break;
-                default:
-                    System.out.println("[!] Opción inválida.");
+                case 1: controlador.onSolicitarListaCursos(); break;
+                case 2: formularioAgregarCurso(); break;
+                case 3: formularioEliminarCurso(); break;
+                case 4: formularioModificarCurso(); break;
+                case 0: enSubmenu = false; break;
+                default: System.out.println("[!] Opción inválida.");
             }
         }
     }
@@ -58,6 +51,15 @@ public class ConsolaVistaCurso implements VistaCurso {
     private void formularioEliminarCurso() {
         String id = LectorConsola.leerTexto("ID del curso a eliminar: ");
         controlador.onEliminarCurso(id);
+    }
+
+    private void formularioModificarCurso() {
+        System.out.println("\n-- Modificar Curso --");
+        String id = LectorConsola.leerTexto("ID del curso a modificar: ");
+        String nuevoNombre = LectorConsola.leerTexto("Nuevo nombre: ");
+        int nuevosCreditos = LectorConsola.leerEntero("Nuevos créditos: ");
+        
+        controlador.onModificarCurso(id, nuevoNombre, nuevosCreditos); 
     }
 
     @Override
