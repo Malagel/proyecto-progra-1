@@ -10,6 +10,7 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 
 - Java (JDK 11)
 - Maven
+- SQLite
 
 ## Cómo ejecutar
 
@@ -22,7 +23,7 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 - Nicolas Mariangel
 - Alvaro Ulloa
 
-## Organización
+## Organización Interna del proyecto
 
 ### Model Objects:
 
@@ -92,14 +93,10 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 	- No usa ningún tipo de lógica.
 	- Se encarga de leer y mostrar errores invocados por service/
 	- se divide en: 
-	
-	# TODO
-		view/
-		controller/
-		console/
-		gui/
+		- view/ : Contiene las interfaces básicas que definen qué debe poder hacer cualquier pantalla del sistema , sin importar si es ventana o terminal.
 
-- utils/
-	- Clases con utilidades, funciones de lógica que se repiten básicamente.
+		- controller/ : Son los coordinadores del sistema. Reciben los comandos del usuario desde la gui o la console, se comunican con los servicios internos para procesar o guardar los datos, y finalmente le dicen a la pantalla qué resultado mostrar.
 
+		- console/ : Contiene la versión de texto del programa. Aquí están los menús de opciones numeradas y las instrucciones para leer lo que el usuario escribe.
 
+		- gui/ : Contiene todo el código para las ventanas visuales.
