@@ -31,7 +31,7 @@ public class Main {
         System.out.println("   SELECCIONE MODO DE VISUALIZACIÓN       ");
         System.out.println("==========================================");
         System.out.println("1. Consola de comandos (Terminal)");
-        System.out.println("2. Interfaz Gráfica (Ventanas)");
+        System.out.println("2. Interfaz Gráfica (Ventana)");
         System.out.print("> ");
         
         String opcion = scanner.nextLine().trim();

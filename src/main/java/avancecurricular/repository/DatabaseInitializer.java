@@ -21,13 +21,13 @@ public class DatabaseInitializer {
             + ");",
 
         "CREATE TABLE IF NOT EXISTS profesores ("
-            + "rut VARCHAR(12) PRIMARY KEY, "
+            + "rut VARCHAR(10) PRIMARY KEY, "
             + "nombre VARCHAR(100) NOT NULL"
             + ");",
 
         // Entidades dependientes
         "CREATE TABLE IF NOT EXISTS estudiantes ("
-            + "rut VARCHAR(12) PRIMARY KEY, "
+            + "rut VARCHAR(10) PRIMARY KEY, "
             + "nombre VARCHAR(100) NOT NULL, "
             + "id_carrera VARCHAR(10) NOT NULL, "
             + "FOREIGN KEY (id_carrera) REFERENCES carreras(id) ON DELETE RESTRICT"

@@ -61,7 +61,7 @@ public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
         
         JButton btnVerRegistros = new JButton("<html><p style='text-align:center;'>Ver Expediente Académico</p></html>");
         JButton btnInscribirCurso = new JButton("<html><p style='text-align:center;'>Inscribir Curso</p></html>");
-        JButton btnCalificar = new JButton("<html><p style='text-align:center;'>Calificar / Actualizar Registro</p></html>");
+        JButton btnCalificar = new JButton("<html><p style='text-align:center;'>Actualizar Registro Curso</p></html>");
         JButton btnRetirarCurso = new JButton("<html><p style='text-align:center;'>Desinscribir Curso</p></html>");
         JButton btnEliminar = new JButton("<html><p style='text-align:center;'>Eliminar Estudiante</p></html>");
 

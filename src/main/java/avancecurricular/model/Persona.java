@@ -8,9 +8,12 @@ public abstract class Persona {
 
     public Persona(String rut, String nombre) {
         this.rut = Objects.requireNonNull(rut, "El RUT no puede ser Nulo");
+
+        if (this.rut.length() > 10) {
+            throw new IllegalArgumentException("El RUT no puede exceder los 10 caracteres.");
+        }
         this.nombre = nombre;
     }
-
     public String getRut() {
         return this.rut;
     }

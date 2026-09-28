@@ -1,4 +1,3 @@
-// main/java/avancecurricular/ui/gui/GuiVistaCurso.java
 package avancecurricular.ui.gui;
 
 import avancecurricular.model.Carrera;
@@ -55,17 +54,19 @@ public class GuiVistaCurso extends JPanel implements VistaCurso {
         panelFormulario.add(panelCampos, BorderLayout.CENTER);
         panelFormulario.add(btnAgregar, BorderLayout.SOUTH);
 
-        JPanel panelBotones = new JPanel(new GridLayout(2, 1, 0, 10)); 
+        JPanel panelBotones = new JPanel(new GridLayout(3, 1, 0, 10)); 
         panelBotones.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createTitledBorder("Acciones"),
             BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         
         JButton btnDetalles = new JButton("<html><p style='text-align:center;'>Ver Detalles</p></html>");
-        JButton btnEliminar = new JButton("<html><p style='text-align:center;'>Eliminar Seleccionado</p></html>");
+        JButton btnEliminar = new JButton("<html><p style='text-align:center;'>Eliminar Curso</p></html>");
+        JButton btnModificar = new JButton("<html><p style='text-align:center;'>Modificar Curso</p></html>");
 
         panelBotones.add(btnDetalles);
         panelBotones.add(btnEliminar);
+        panelBotones.add(btnModificar);
 
         panelIzquierdo.add(panelFormulario, BorderLayout.NORTH);
         panelIzquierdo.add(panelBotones, BorderLayout.CENTER);
@@ -154,6 +155,40 @@ public class GuiVistaCurso extends JPanel implements VistaCurso {
                 controlador.onConsultarDetalleCurso(id);
             } else {
                 mostrarError("Debe seleccionar un curso de la tabla para ver sus detalles.");
+            }
+        });
+
+        btnModificar.addActionListener(e -> {
+            int filaSeleccionada = tablaCursos.getSelectedRow();
+            if (filaSeleccionada >= 0 && controlador != null) {
+                String id = (String) tableModel.getValueAt(filaSeleccionada, 0);
+                
+                JTextField txtNombre = new JTextField();
+                JTextField txtCreditos = new JTextField();
+                Object[] inputs = {
+                    "Nuevo Nombre:", txtNombre,
+                    "Nuevos Créditos:", txtCreditos
+                };
+                
+                int option = JOptionPane.showConfirmDialog(this, inputs, "Modificar Curso: " + id, JOptionPane.OK_CANCEL_OPTION);
+                if (option == JOptionPane.OK_OPTION) {
+                    try {
+                        String nombre = txtNombre.getText().trim();
+                        int creditos = Integer.parseInt(txtCreditos.getText().trim());
+                        
+                        if (nombre.isEmpty()) {
+                            mostrarError("El nombre no puede estar vacío.");
+                            return;
+                        }
+                        
+                        controlador.onModificarCurso(id, nombre, creditos);
+                        controlador.onSolicitarListaCursos(); 
+                    } catch (NumberFormatException ex) {
+                        mostrarError("Los créditos deben ser un número entero válido.");
+                    }
+                }
+            } else {
+                mostrarError("Debe seleccionar un curso de la tabla para modificarlo.");
             }
         });
     }
