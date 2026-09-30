@@ -11,6 +11,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.Collection;
 
+/**
+ * Panel gráfico (Swing) para el módulo de Profesor.
+ * Utiliza un {@link DefaultTableModel} sobreescrito para renderizar una tabla de sólo lectura,
+ * delegando la reactividad (actualizaciones, registros, eliminaciones) mediante listeners hacia el controlador.
+ */
 public class GuiVistaProfesor extends JPanel implements VistaProfesor {
     private ControladorProfesor controlador;
 
@@ -171,6 +176,12 @@ public class GuiVistaProfesor extends JPanel implements VistaProfesor {
         });
     }
 
+    /**
+     * Extrae de forma segura el identificador de la entidad en la fila seleccionada por el usuario.
+     *
+     * @return El identificador (RUT) contenido en la columna 0, 
+     *         o {@code null} si no hay ninguna fila seleccionada en la tabla.
+     */
     private String obtenerRutSeleccionado() {
         int fila = tablaProfesores.getSelectedRow();
         if (fila >= 0) {

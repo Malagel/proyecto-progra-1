@@ -12,6 +12,10 @@ import avancecurricular.service.EstudianteService;
 import avancecurricular.service.ProfesorService;
 import avancecurricular.ui.view.VistaCurso;
 
+/**
+ * Intermediario (Controlador) que orquesta el flujo de información entre la capa de presentación (Vista)
+ * y la lógica de negocio (Servicios) para el módulo correspondiente.
+ */
 public class ControladorCurso {
     private final VistaCurso vista;
     private final CursoService cursoService;

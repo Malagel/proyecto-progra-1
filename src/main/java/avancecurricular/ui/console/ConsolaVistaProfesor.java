@@ -7,6 +7,10 @@ import avancecurricular.ui.view.VistaProfesor;
 
 import java.util.Collection;
 
+/**
+ * Implementación de terminal (CLI) para la gestión del módulo de Profesor.
+ * Presenta un submenú bloqueante y formatea las salidas de texto en consola.
+ */
 public class ConsolaVistaProfesor implements VistaProfesor {
 
     private ControladorProfesor controlador;
@@ -16,6 +20,10 @@ public class ConsolaVistaProfesor implements VistaProfesor {
         this.controlador = controlador;
     }
 
+    /**
+     * Entra en un ciclo de submenú que mantiene al usuario en este módulo
+     * hasta que decida explícitamente volver al menú principal (opción 0).
+     */
     @Override
     public void iniciar() {
         boolean enSubmenu = true;

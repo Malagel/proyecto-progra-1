@@ -4,6 +4,10 @@ import avancecurricular.config.ContextoAplicacion;
 import avancecurricular.ui.controller.*;
 import avancecurricular.ui.view.*;
 
+/**
+ * Ensamblador del entorno de Consola. Se encarga de instanciar las vistas de terminal
+ * y orquestar la inyección de dependencias uniendo cada vista con su controlador correspondiente.
+ */
 public class AppConsola {
     public static void iniciar(ContextoAplicacion contexto) {
         VistaPrincipal vistaPrincipal = new ConsolaVistaPrincipal();

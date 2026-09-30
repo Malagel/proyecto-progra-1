@@ -7,6 +7,10 @@ import avancecurricular.ui.view.VistaCarrera;
 
 import java.util.Collection;
 
+/**
+ * Implementación de terminal (CLI) para la gestión del módulo de Carrera.
+ * Presenta un submenú bloqueante y formatea las salidas de texto en consola.
+ */
 public class ConsolaVistaCarrera implements VistaCarrera {
     private ControladorCarrera controlador;
 
@@ -15,6 +19,10 @@ public class ConsolaVistaCarrera implements VistaCarrera {
         this.controlador = controlador;
     }
 
+    /**
+     * Entra en un ciclo de submenú que mantiene al usuario en este módulo
+     * hasta que decida explícitamente volver al menú principal (opción 0).
+     */
     @Override
     public void iniciar() {
         boolean enSubmenu = true;

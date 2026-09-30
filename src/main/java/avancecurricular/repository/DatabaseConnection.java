@@ -9,6 +9,16 @@ public class DatabaseConnection {
 
     private DatabaseConnection() {}
 
+    /**
+     * Establece la conexión principal con la base de datos SQLite.
+     * <p>
+     * NOTA CRÍTICA: Se ejecuta {@code PRAGMA foreign_keys = ON} obligatoriamente, 
+     * ya que SQLite deshabilita la integridad referencial por defecto. Sin esta instrucción, 
+     * los borrados en cascada (ON DELETE CASCADE/RESTRICT) fallarán silenciosamente.
+     *
+     * @return Una conexión transaccional lista para operar.
+     * @throws SQLException si el archivo de la base de datos no es accesible.
+     */
     public static Connection getConnection() throws SQLException {
         Connection conn = DriverManager.getConnection(URL);
         

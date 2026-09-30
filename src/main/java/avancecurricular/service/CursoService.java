@@ -19,6 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Servicio encargado de gestionar el ciclo de vida de los cursos y salvaguardar su
+ * integridad respecto a carreras, profesores y estudiantes.
+ */
 public class CursoService {
     private final Map<String, Curso> cursos;
     private final CursoDAO cursoDAO;
@@ -50,11 +54,30 @@ public class CursoService {
         this.unitOfWork.registrarAccion(conn -> this.cursoDAO.insertarCurso(curso, conn));
     }
 
+    /**
+     * Método de conveniencia que instancia la entidad internamente y delega su registro 
+     * en el flujo principal, reduciendo el acoplamiento desde los controladores.
+     *
+     * @param id       El identificador único a asignar.
+     * @param nombre   El nombre comercial o descriptivo.
+     * @param creditos El peso académico de la entidad.
+     */
     public void registrarCurso(String id, String nombre, int creditos) {
         Curso nuevoCurso = new Curso(id, nombre, creditos);
-        this.registrarCurso(nuevoCurso); // Llama al método original
+        this.registrarCurso(nuevoCurso);
     }
 
+    /**
+     * Elimina un curso del sistema de forma segura, garantizando que no esté integrado en mallas curriculares,
+     * no sea prerrequisito, y no tenga estudiantes con registros en él. Si el curso es dictado por profesores,
+     * se les remueve de su carga académica.
+     *
+     * @param id                Identificador del curso.
+     * @param carreraService    Servicio para validación en mallas.
+     * @param estudianteService Servicio para validación en registros académicos.
+     * @param profesorService   Servicio para desasignación en cargas docentes.
+     * @throws IllegalStateException si el curso incumple alguna regla de integridad que impida su eliminación.
+     */
     public void eliminarCurso(String id, CarreraService carreraService, EstudianteService estudianteService, ProfesorService profesorService) {
         if (!this.cursos.containsKey(id)) {
             throw new IllegalArgumentException("El curso no existe.");

@@ -2,6 +2,11 @@ package avancecurricular.ui.console;
 
 import java.util.Scanner;
 
+/**
+ * Utilidad transversal para la lectura segura de datos desde la entrada estándar (System.in).
+ * Implementa ciclos de reintento automático (retry-loops) para interceptar excepciones de parseo,
+ * evitando caídas de la aplicación frente a errores de tipado del usuario.
+ */
 public class LectorConsola {
     private static final Scanner scanner = new Scanner(System.in);
 

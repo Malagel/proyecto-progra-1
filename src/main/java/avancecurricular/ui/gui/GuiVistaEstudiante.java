@@ -11,6 +11,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.Collection;
 
+/**
+ * Panel gráfico (Swing) para el módulo de Estudiante.
+ * Utiliza un {@link DefaultTableModel} sobreescrito para renderizar una tabla de sólo lectura,
+ * delegando la reactividad (actualizaciones, registros, eliminaciones) mediante listeners hacia el controlador.
+ */
 public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
     private ControladorEstudiante controlador;
 
@@ -216,6 +221,12 @@ public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
         });
     }
 
+    /**
+     * Extrae de forma segura el identificador de la entidad en la fila seleccionada por el usuario.
+     *
+     * @return El identificador (RUT) contenido en la columna 0, 
+     *         o {@code null} si no hay ninguna fila seleccionada en la tabla.
+     */
     private String obtenerRutSeleccionado() {
         int fila = tablaEstudiantes.getSelectedRow();
         if (fila >= 0) {

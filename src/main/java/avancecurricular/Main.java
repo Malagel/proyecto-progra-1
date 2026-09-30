@@ -6,7 +6,11 @@ import avancecurricular.ui.gui.AppGui;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class Main {
+/**
+ * Punto de entrada principal de la aplicación. Inicializa el contexto, maneja los bloqueos
+ * de cierre (shutdown hooks) para guardar la transacción final y lanza la interfaz de usuario seleccionada.
+ */
+public class Main { 
     public static void main(String[] args) {
         ContextoAplicacion contexto = new ContextoAplicacion();
         try {

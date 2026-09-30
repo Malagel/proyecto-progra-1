@@ -7,6 +7,10 @@ import avancecurricular.ui.controller.ControladorCurso;
 import avancecurricular.ui.view.VistaCurso;
 import java.util.Collection;
 
+/**
+ * Implementación de terminal (CLI) para la gestión del módulo de Curso.
+ * Presenta un submenú bloqueante y formatea las salidas de texto en consola.
+ */
 public class ConsolaVistaCurso implements VistaCurso {
     private ControladorCurso controlador;
 
@@ -15,6 +19,10 @@ public class ConsolaVistaCurso implements VistaCurso {
         this.controlador = controlador;
     }
 
+    /**
+     * Entra en un ciclo de submenú que mantiene al usuario en este módulo
+     * hasta que decida explícitamente volver al menú principal (opción 0).
+     */
     @Override
     public void iniciar() {
         boolean enSubmenu = true;

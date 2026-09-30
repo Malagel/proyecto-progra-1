@@ -10,10 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CursoDAO {
+
+    /**
+     * Clase contenedora (DTO) de uso interno del repositorio. 
+     * Su única responsabilidad es extraer y transportar temporalmente los datos crudos 
+     * de una fila de la base de datos antes de reconstruir el grafo de objetos del dominio.
+     */
     public static class FilaCurso {
         private final String id;
         private final String nombre;
         private final int creditos;
+
 
         public FilaCurso(String id, String nombre, int creditos) {
             this.id = id;

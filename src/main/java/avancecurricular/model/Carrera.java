@@ -5,6 +5,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 
+/**
+ * Representa un programa académico que contiene un plan de estudios estructurado
+ * por asignaturas y semestres.
+ */
 public class Carrera {
     private final String id;
     private String nombre;
@@ -18,7 +22,12 @@ public class Carrera {
         setNombre(nombre);
         setCreditosTotales(creditosTotales);
     }
-    
+
+    /**
+     * Agrega una nueva asignatura a la malla curricular de la carrera.
+     *
+     * @param asignatura La asignatura a integrar en el plan de estudios.
+     */
     public void addAsignatura(AsignaturaMalla asignatura) {
     	Objects.requireNonNull(asignatura, "La asignatura no puede ser nula");
     	this.planDeEstudio.add(asignatura);
@@ -57,6 +66,11 @@ public class Carrera {
         this.creditosTotales = creditosTotales;
     }
 	
+    /**
+     * La igualdad de esta entidad se evalúa de manera estricta mediante su identificador único,
+     * ignorando sus atributos mutables. Esto garantiza su consistencia y estabilidad 
+     * al ser almacenada en colecciones basadas en hashes (ej. {@link java.util.HashSet}).
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

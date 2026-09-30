@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EstudianteDAO {
+
+    /**
+     * Clase contenedora (DTO) de uso interno del repositorio. 
+     * Su única responsabilidad es extraer y transportar temporalmente los datos crudos 
+     * de una fila de la base de datos antes de reconstruir el grafo de objetos del dominio.
+     */
     public static class FilaEstudiante {
         private final String rut;
         private final String nombre;
