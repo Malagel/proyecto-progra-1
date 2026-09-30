@@ -12,9 +12,13 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.Collection;
 
+/**
+ * Panel gráfico (Swing) para el módulo de Cursos.
+ * Utiliza un {@link DefaultTableModel} sobreescrito para renderizar una tabla de sólo lectura,
+ * delegando la reactividad (actualizaciones, registros, eliminaciones) mediante listeners hacia el controlador.
+ */
 public class GuiVistaCurso extends JPanel implements VistaCurso {
     private ControladorCurso controlador;
-
     private JTextField txtId;
     private JTextField txtNombre;
     private JTextField txtCreditos;
@@ -25,13 +29,13 @@ public class GuiVistaCurso extends JPanel implements VistaCurso {
         setLayout(new BorderLayout(20, 20));
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        JPanel panelIzquierdo = new JPanel(new BorderLayout(0, 20)); 
-        panelIzquierdo.setPreferredSize(new Dimension(350, 0)); 
+        JPanel panelIzquierdo = new JPanel(new BorderLayout(0, 20));
+        panelIzquierdo.setPreferredSize(new Dimension(350, 0));
         
         JPanel panelFormulario = new JPanel(new BorderLayout(0, 15));
         panelFormulario.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createTitledBorder("Registrar Curso"),
-            BorderFactory.createEmptyBorder(10, 10, 10, 10) 
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         
         JPanel panelCampos = new JPanel(new GridLayout(3, 2, 10, 15));
@@ -54,7 +58,7 @@ public class GuiVistaCurso extends JPanel implements VistaCurso {
         panelFormulario.add(panelCampos, BorderLayout.CENTER);
         panelFormulario.add(btnAgregar, BorderLayout.SOUTH);
 
-        JPanel panelBotones = new JPanel(new GridLayout(3, 1, 0, 10)); 
+        JPanel panelBotones = new JPanel(new GridLayout(3, 1, 0, 10));
         panelBotones.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createTitledBorder("Acciones"),
             BorderFactory.createEmptyBorder(10, 10, 10, 10)
@@ -70,30 +74,28 @@ public class GuiVistaCurso extends JPanel implements VistaCurso {
 
         panelIzquierdo.add(panelFormulario, BorderLayout.NORTH);
         panelIzquierdo.add(panelBotones, BorderLayout.CENTER);
-
         add(panelIzquierdo, BorderLayout.WEST);
 
         String[] columnas = {"ID", "Nombre", "Créditos"};
         tableModel = new DefaultTableModel(columnas, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) { 
-                return false; 
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
         };
         
         tablaCursos = new JTable(tableModel);
         tablaCursos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tablaCursos.getTableHeader().setReorderingAllowed(false);
-        
-        tablaCursos.setRowHeight(35); 
-        tablaCursos.getTableHeader().setPreferredSize(new Dimension(0, 40)); 
-        tablaCursos.setShowVerticalLines(false); 
+        tablaCursos.setRowHeight(35);
+        tablaCursos.getTableHeader().setPreferredSize(new Dimension(0, 40));
+        tablaCursos.setShowVerticalLines(false);
         
         DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10)); 
+                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
                 return this;
             }
         };
@@ -131,50 +133,41 @@ public class GuiVistaCurso extends JPanel implements VistaCurso {
         });
 
         btnEliminar.addActionListener(e -> {
-            int filaSeleccionada = tablaCursos.getSelectedRow();
-            if (filaSeleccionada >= 0 && controlador != null) {
-                String id = (String) tableModel.getValueAt(filaSeleccionada, 0);
+            String id = obtenerIdSeleccionado();
+            if (id != null && controlador != null) {
+                int confirmacion = JOptionPane.showConfirmDialog(this,
+                        "¿Está seguro que desea eliminar el curso " + id + "?",
+                        "Confirmar Eliminación",
+                        JOptionPane.YES_NO_OPTION);
                 
-                int confirmacion = JOptionPane.showConfirmDialog(this, 
-                    "¿Está seguro que desea eliminar el curso " + id + "?", 
-                    "Confirmar Eliminación", 
-                    JOptionPane.YES_NO_OPTION);
-                    
                 if (confirmacion == JOptionPane.YES_OPTION) {
                     controlador.onEliminarCurso(id);
                 }
-            } else {
-                mostrarError("Debe seleccionar un curso de la tabla para eliminarlo.");
             }
         });
 
         btnDetalles.addActionListener(e -> {
-            int filaSeleccionada = tablaCursos.getSelectedRow();
-            if (filaSeleccionada >= 0 && controlador != null) {
-                String id = (String) tableModel.getValueAt(filaSeleccionada, 0);
+            String id = obtenerIdSeleccionado();
+            if (id != null && controlador != null) {
                 controlador.onConsultarDetalleCurso(id);
-            } else {
-                mostrarError("Debe seleccionar un curso de la tabla para ver sus detalles.");
             }
         });
 
         btnModificar.addActionListener(e -> {
-            int filaSeleccionada = tablaCursos.getSelectedRow();
-            if (filaSeleccionada >= 0 && controlador != null) {
-                String id = (String) tableModel.getValueAt(filaSeleccionada, 0);
-                
-                JTextField txtNombre = new JTextField();
-                JTextField txtCreditos = new JTextField();
+            String id = obtenerIdSeleccionado();
+            if (id != null && controlador != null) {
+                JTextField txtNombreDialog = new JTextField();
+                JTextField txtCreditosDialog = new JTextField();
                 Object[] inputs = {
-                    "Nuevo Nombre:", txtNombre,
-                    "Nuevos Créditos:", txtCreditos
+                    "Nuevo Nombre:", txtNombreDialog,
+                    "Nuevos Créditos:", txtCreditosDialog
                 };
                 
                 int option = JOptionPane.showConfirmDialog(this, inputs, "Modificar Curso: " + id, JOptionPane.OK_CANCEL_OPTION);
                 if (option == JOptionPane.OK_OPTION) {
                     try {
-                        String nombre = txtNombre.getText().trim();
-                        int creditos = Integer.parseInt(txtCreditos.getText().trim());
+                        String nombre = txtNombreDialog.getText().trim();
+                        int creditos = Integer.parseInt(txtCreditosDialog.getText().trim());
                         
                         if (nombre.isEmpty()) {
                             mostrarError("El nombre no puede estar vacío.");
@@ -182,15 +175,29 @@ public class GuiVistaCurso extends JPanel implements VistaCurso {
                         }
                         
                         controlador.onModificarCurso(id, nombre, creditos);
-                        controlador.onSolicitarListaCursos(); 
+                        controlador.onSolicitarListaCursos();
                     } catch (NumberFormatException ex) {
                         mostrarError("Los créditos deben ser un número entero válido.");
                     }
                 }
-            } else {
-                mostrarError("Debe seleccionar un curso de la tabla para modificarlo.");
             }
         });
+    }
+
+    /**
+     * Extrae de forma segura el identificador del curso en la fila seleccionada por el usuario.
+     *
+     * @return El ID del curso contenido en la columna 0, 
+     *         o {@code null} si no hay ninguna fila seleccionada en la tabla.
+     */
+    private String obtenerIdSeleccionado() {
+        int fila = tablaCursos.getSelectedRow();
+        if (fila >= 0) {
+            return (String) tableModel.getValueAt(fila, 0);
+        } else {
+            mostrarError("Debe seleccionar un curso de la tabla para realizar esta acción.");
+            return null;
+        }
     }
 
     private void limpiarFormulario() {
@@ -251,7 +258,6 @@ public class GuiVistaCurso extends JPanel implements VistaCurso {
                 sb.append("  - ").append(p.getNombre()).append(" (RUT: ").append(p.getRut()).append(")\n");
             }
         }
-
         JOptionPane.showMessageDialog(this, sb.toString(), "Detalles del Curso: " + curso.getId(), JOptionPane.INFORMATION_MESSAGE);
     }
 
