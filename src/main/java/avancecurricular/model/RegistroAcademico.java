@@ -3,6 +3,9 @@ package avancecurricular.model;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Registra el estado académico y la calificación de un estudiante en un curso específico.
+ */
 public class RegistroAcademico {
 
     public static final String ESTADO_APROBADO = "APROBADO";
@@ -28,6 +31,12 @@ public class RegistroAcademico {
         this.estado = estado.toUpperCase().trim();
     }
 
+    /**
+     * Valida que el estado proporcionado pertenezca a los estados académicos permitidos.
+     *
+     * @param estado El estado a validar.
+     * @throws IllegalArgumentException si el estado no está dentro de los permitidos.
+     */
     private void validarEstado(String estado) {
         Objects.requireNonNull(estado, "El estado no puede ser nulo.");
         String estNormalizado = estado.toUpperCase().trim();
@@ -36,6 +45,14 @@ public class RegistroAcademico {
         }
     }
 
+    /**
+     * Valida que la calificación se encuentre en el rango reglamentario (1.0 a 7.0),
+     * eximiendo de la validación a los cursos que aún se encuentran en curso.
+     *
+     * @param nota   La calificación a validar.
+     * @param estado El estado actual del curso.
+     * @throws IllegalArgumentException si la nota está fuera de rango para un curso finalizado.
+     */
     private void validarNota(double nota, String estado) {
         if (ESTADO_CURSANDO.equalsIgnoreCase(estado)) {
             return;
@@ -45,7 +62,12 @@ public class RegistroAcademico {
         }
     }
 
-    public boolean esAprobado() {
+    /**
+     * Determina si el registro indica que el curso fue superado con éxito.
+     *
+     * @return {@code true} si el estado es aprobado, {@code false} en caso contrario.
+     */
+    public boolean esAprobado() {   
         return ESTADO_APROBADO.equals(this.estado);
     }
 

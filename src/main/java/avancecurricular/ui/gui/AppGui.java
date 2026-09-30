@@ -1,4 +1,3 @@
-// main/java/avancecurricular/ui/gui/AppGui.java
 package avancecurricular.ui.gui;
 
 import avancecurricular.config.ContextoAplicacion;
@@ -7,11 +6,15 @@ import javax.swing.*;
 import java.awt.Toolkit;
 import java.util.Enumeration;
 
+/**
+ * Ensamblador del entorno Gráfico (Swing). Configura el entorno visual del sistema operativo host,
+ * aplica correcciones de resolución, e instancia la jerarquía de ventanas y controladores.
+ */
 public class AppGui {
     public static void iniciar(ContextoAplicacion contexto) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            aplicarEscaladoDPI(); // Calcula y aplica el tamaño correcto según tu monitor
+            aplicarEscaladoDPI();
         } catch (Exception e) {
             System.err.println("No se pudo cargar el diseño del sistema.");
         }
@@ -37,19 +40,19 @@ public class AppGui {
     }
 
     /**
-     * Calcula la resolución del monitor actual y aumenta dinámicamente 
-     * el tamaño de todas las fuentes de la interfaz si es una pantalla 4K/HiDPI.
+     * Extrae la resolución del monitor actual y aplica un factor de escala (multiplier) dinámico
+     * a todas las fuentes del {@link UIManager} si detecta una pantalla de alta densidad (HiDPI/4K).
+     * Esto garantiza que la interfaz mantenga proporciones legibles en monitores modernos.
      */
     private static void aplicarEscaladoDPI() {
         int dpi = Toolkit.getDefaultToolkit().getScreenResolution();
-        float scale = dpi / 96.0f; // 96 DPI es el estándar base de pantallas antiguas
+        float scale = dpi / 96.0f;
 
         if (scale > 1.0f) {
             Enumeration<Object> keys = UIManager.getDefaults().keys();
             while (keys.hasMoreElements()) {
                 Object key = keys.nextElement();
                 Object value = UIManager.get(key);
-                // Si la propiedad es una fuente, le aplicamos el multiplicador
                 if (value instanceof java.awt.Font) {
                     java.awt.Font font = (java.awt.Font) value;
                     UIManager.put(key, font.deriveFont(font.getSize2D() * scale));

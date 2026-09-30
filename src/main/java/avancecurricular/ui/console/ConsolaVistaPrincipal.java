@@ -3,6 +3,11 @@ package avancecurricular.ui.console;
 import avancecurricular.ui.controller.ControladorPrincipal;
 import avancecurricular.ui.view.VistaPrincipal;
 
+/**
+ * Implementación de {@link VistaPrincipal} para el entorno de terminal.
+ * Mantiene el ciclo de ejecución bloqueante (loop principal) que captura la navegación 
+ * del usuario hacia los distintos sub-módulos del sistema.
+ */
 public class ConsolaVistaPrincipal implements VistaPrincipal {
     private ControladorPrincipal controlador;
 
@@ -11,6 +16,10 @@ public class ConsolaVistaPrincipal implements VistaPrincipal {
         this.controlador = controlador;
     }
 
+    /**
+     * Entra en un ciclo de submenú que mantiene al usuario en este módulo
+     * hasta que decida explícitamente salir y guardar (opción 0).
+     */
     @Override
     public void iniciar() {
         boolean ejecutando = true;

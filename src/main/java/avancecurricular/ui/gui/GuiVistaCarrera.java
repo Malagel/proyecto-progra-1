@@ -14,6 +14,11 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Panel gráfico (Swing) para el módulo de Carrera.
+ * Utiliza un {@link DefaultTableModel} sobreescrito para renderizar una tabla de sólo lectura,
+ * delegando la reactividad (actualizaciones, registros, eliminaciones) mediante listeners hacia el controlador.
+ */
 public class GuiVistaCarrera extends JPanel implements VistaCarrera {
     private ControladorCarrera controlador;
 
@@ -64,7 +69,7 @@ public class GuiVistaCarrera extends JPanel implements VistaCarrera {
         
         JButton btnVerMalla = new JButton("<html><p style='text-align:center;'>Ver Malla Curricular</p></html>");
         JButton btnAddAsignatura = new JButton("<html><p style='text-align:center;'>Agregar Curso a la Malla</p></html>");
-        JButton btnAddPrerrequisito = new JButton("<html><p style='text-align:center;'>Agregar Prerrequisito</p></html>");
+        JButton btnAddPrerrequisito = new JButton("<html><p style='text-align:center;'>Agregar Prerrequisito a Curso</p></html>");
         JButton btnEliminar = new JButton("<html><p style='text-align:center;'>Eliminar Carrera</p></html>");
 
         panelBotones.add(btnVerMalla);
@@ -198,6 +203,12 @@ public class GuiVistaCarrera extends JPanel implements VistaCarrera {
         });
     }
 
+    /**
+     * Extrae de forma segura el identificador de la entidad en la fila seleccionada por el usuario.
+     *
+     * @return El identificador (ej. ID o RUT) contenido en la columna 0, 
+     *         o {@code null} si no hay ninguna fila seleccionada en la tabla.
+     */
     private String obtenerIdSeleccionado() {
         int fila = tablaCarreras.getSelectedRow();
         if (fila >= 0) {

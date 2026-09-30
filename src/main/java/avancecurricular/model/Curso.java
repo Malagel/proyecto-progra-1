@@ -2,6 +2,9 @@ package avancecurricular.model;
 
 import java.util.Objects;
 
+/**
+ * Representa un curso genérico de la institución, independiente de una malla curricular específica.
+ */
 public class Curso {
     private final String id;
     private String nombre;
@@ -37,6 +40,11 @@ public class Curso {
         this.creditos = creditos;
     }
 
+    /**
+     * La igualdad de esta entidad se evalúa de manera estricta mediante su identificador único,
+     * ignorando sus atributos mutables. Esto garantiza su consistencia y estabilidad 
+     * al ser almacenada en colecciones basadas en hashes (ej. {@link java.util.HashSet}).
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

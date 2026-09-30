@@ -11,11 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CarreraDAO {
+
+    /**
+     * Clase contenedora (DTO) de uso interno del repositorio. 
+     * Su única responsabilidad es extraer y transportar temporalmente los datos crudos 
+     * de una fila de la base de datos antes de reconstruir el grafo de objetos del dominio.
+     */
     public static class FilaCarrera {
         private final String id;
         private final String nombre;
         private final int creditosTotales;
-
+        
         public FilaCarrera(String id, String nombre, int creditosTotales) {
             this.id = id;
             this.nombre = nombre;

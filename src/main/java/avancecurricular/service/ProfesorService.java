@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Servicio encargado de la administración de la plana docente y sus asignaturas dictadas.
+ */
 public class ProfesorService {
 
     private final Map<String, Profesor> profesores;
@@ -26,7 +29,14 @@ public class ProfesorService {
         this.profesorDAO = dao;
         this.unitOfWork = unitOfWork;
     }
-
+    /**
+     * Hidrata el estado de la aplicación cargando los registros desde la base de datos
+     * y resolviendo las relaciones en memoria (mapeo ORM manual).
+     *
+     * @param conn         Conexión activa a la base de datos.
+     * @param cursoService Servicio inyectado para buscar en memoria y asignar las referencias reales de los cursos.
+     * @throws SQLException si ocurre un error de lectura durante la extracción de datos.
+     */
     public void inicializar(Connection conn, CursoService cursoService) throws SQLException {
         this.profesores.clear();
 
@@ -72,6 +82,13 @@ public class ProfesorService {
         this.unitOfWork.registrarAccion(conn -> this.profesorDAO.insertarProfesor(profesor, conn));
     }
 
+    /**
+     * Método de conveniencia que instancia la entidad internamente y delega su registro 
+     * en el flujo principal, reduciendo el acoplamiento desde los controladores.
+     *
+     * @param rut       El identificador único a asignar.
+     * @param nombre    El nombre personal  .
+     */
     public void registrarProfesor(String rut, String nombre) {
         Profesor nuevoProfesor = new Profesor(rut, nombre);
         this.registrarProfesor(nuevoProfesor);

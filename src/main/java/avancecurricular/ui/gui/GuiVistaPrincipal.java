@@ -1,4 +1,3 @@
-// main/java/avancecurricular/ui/gui/GuiVistaPrincipal.java
 package avancecurricular.ui.gui;
 
 import avancecurricular.ui.controller.ControladorPrincipal;
@@ -7,6 +6,10 @@ import avancecurricular.ui.view.VistaPrincipal;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Contenedor principal de la interfaz gráfica. Implementa un sistema de navegación
+ * basado en un {@link JTabbedPane}, donde cada pestaña representa un submódulo de la aplicación.
+ */
 public class GuiVistaPrincipal extends JFrame implements VistaPrincipal {
     private ControladorPrincipal controlador;
     private final JTabbedPane tabbedPane;
@@ -17,7 +20,6 @@ public class GuiVistaPrincipal extends JFrame implements VistaPrincipal {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); 
 
-        // 1. Contenedor de pestañas
         tabbedPane = new JTabbedPane();
         tabbedPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); 
 
@@ -33,13 +35,9 @@ public class GuiVistaPrincipal extends JFrame implements VistaPrincipal {
             }
         });
 
-        // 2. Barra inferior dinámica
-        // Usamos BorderLayout para la barra inferior, alineando el botón al ESTE (Derecha)
         JPanel panelInferior = new JPanel(new BorderLayout());
         panelInferior.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        
-        // Usamos HTML para que herede la fuente escalada por DPI, permitiendo auto-wrapping y
-        // añadiendo padding interno (10px arriba/abajo, 40px a los lados) para darle volumen nativo.
+
         JButton btnSalir = new JButton("<html><p style='text-align:center; padding: 10px 40px;'><b>Guardar cambios y Salir</b></p></html>");
         
         btnSalir.addActionListener(e -> {
@@ -58,6 +56,13 @@ public class GuiVistaPrincipal extends JFrame implements VistaPrincipal {
         add(panelInferior, BorderLayout.SOUTH);
     }
 
+    /**
+     * Agrega un panel como una nueva pestaña en la ventana principal, inyectando código HTML 
+     * en el título para forzar el padding y lograr un diseño más robusto.
+     *
+     * @param titulo Nombre de la pestaña.
+     * @param panel  El componente (vista) a renderizar en el cuerpo de la pestaña.
+     */
     public void agregarPestana(String titulo, JPanel panel) {
         tabbedPane.addTab(titulo, panel);
         

@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Representa al docente encargado de impartir uno o múltiples cursos en la institución.
+ */
 public class Profesor extends Persona {
     private final Set<Curso> cursosDictados;
 
@@ -18,6 +21,11 @@ public class Profesor extends Persona {
         this.cursosDictados = (cursosDictados != null) ? new HashSet<>(cursosDictados) : new HashSet<>();
     }
     
+    /**
+     * Asigna un nuevo curso a la carga académica del profesor.
+     *
+     * @param curso El curso a dictar.
+     */
     public void asignarCurso(Curso curso) {
         Objects.requireNonNull(curso, "El curso no puede ser nulo.");
         this.cursosDictados.add(curso);

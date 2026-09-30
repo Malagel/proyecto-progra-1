@@ -6,6 +6,13 @@ public abstract class Persona {
     private final String rut;
     private String nombre;
 
+    /**
+     * Crea una nueva persona validando la longitud de su identificador.
+     *
+     * @param rut    El identificador único (ej. formato con o sin puntos/guion).
+     * @param nombre El nombre completo de la persona.
+     * @throws IllegalArgumentException si la longitud del RUT excede los 10 caracteres.
+     */
     public Persona(String rut, String nombre) {
         this.rut = Objects.requireNonNull(rut, "El RUT no puede ser Nulo");
 
@@ -26,6 +33,11 @@ public abstract class Persona {
         this.nombre = nombre;
     }
 
+    /**
+     * La igualdad de esta entidad se evalúa de manera estricta mediante su identificador único,
+     * ignorando sus atributos mutables. Esto garantiza su consistencia y estabilidad 
+     * al ser almacenada en colecciones basadas en hashes (ej. {@link java.util.HashSet}).
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

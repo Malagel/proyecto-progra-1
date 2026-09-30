@@ -16,6 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Servicio encargado de gestionar la lógica de negocio relacionada con los programas académicos
+ * y la estructuración de sus mallas curriculares.
+ */
 public class CarreraService {
     private final Map<String, Carrera> carreras;
     private final CarreraDAO carreraDAO;
@@ -27,6 +31,14 @@ public class CarreraService {
         this.unitOfWork = unitOfWork;
     }
 
+    /**
+     * Hidrata el estado de la aplicación cargando los registros desde la base de datos
+     * y resolviendo las relaciones en memoria (mapeo ORM manual).
+     *
+     * @param conn Conexión activa a la base de datos.
+     * @param cursoService Servicio inyectado para buscar en memoria y asignar las referencias reales de los cursos.
+     * @throws SQLException si ocurre un error de lectura durante la extracción de datos.
+     */
     public void inicializar(Connection conn, CursoService cursoService) throws SQLException {
         List<FilaCarrera> filasCarrera = carreraDAO.extraerCarreras(conn);
         for (FilaCarrera fila : filasCarrera) {
@@ -61,6 +73,14 @@ public class CarreraService {
         }
     }
 
+    /**
+     * Integra un curso existente al plan de estudios de una carrera en un semestre determinado.
+     *
+     * @param idCarrera Identificador de la carrera.
+     * @param curso     Entidad del curso a agregar.
+     * @param semestre  Número del semestre en la malla.
+     * @throws IllegalStateException si el curso ya forma parte de la malla de esta carrera.
+     */
     public void agregarAsignaturaMalla(String idCarrera, Curso curso, int semestre) {
         Carrera carrera = buscarPorId(idCarrera);
         if (carrera == null) {
@@ -116,6 +136,14 @@ public class CarreraService {
         this.unitOfWork.registrarAccion(conn -> this.carreraDAO.insertarCarrera(carrera, conn));
     }
 
+    /**
+     * Elimina una carrera del sistema, verificando previamente que no existan estudiantes
+     * matriculados en ella para mantener la integridad referencial.
+     *
+     * @param id                Identificador de la carrera a eliminar.
+     * @param estudianteService Servicio de estudiantes para validar la matrícula.
+     * @throws IllegalStateException si existen estudiantes activos en la carrera.
+     */
     public void eliminarCarrera(String id, EstudianteService estudianteService) {
         if (!this.carreras.containsKey(id)) throw new IllegalArgumentException("...");
         

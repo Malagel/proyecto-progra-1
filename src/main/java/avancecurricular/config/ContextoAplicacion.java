@@ -6,6 +6,10 @@ import avancecurricular.service.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Contenedor de inyección de dependencias (IoC) manual que inicializa, configura
+ * y provee las instancias de repositorios y servicios a lo largo del ciclo de vida de la aplicación.
+ */
 public class ContextoAplicacion {
     private final UnitOfWork unitOfWork;
 
@@ -19,6 +23,7 @@ public class ContextoAplicacion {
     private final ProfesorService profesorService;
     private final EstudianteService estudianteService;
 
+    
     public ContextoAplicacion() {
         this.unitOfWork = new UnitOfWork();
 
@@ -33,6 +38,12 @@ public class ContextoAplicacion {
         this.estudianteService = new EstudianteService(this.estudianteDAO, this.unitOfWork);
     }
 
+    /**
+     * Configura la estructura de la base de datos y carga los datos persistidos en memoria
+     * resolviendo las relaciones entre entidades.
+     *
+     * @throws RuntimeException si ocurre un fallo de conexión durante la inicialización.
+     */
     public void inicializarDatos() {        
         try {
             DatabaseInitializer.crearTablasSiNoExisten();

@@ -16,6 +16,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Servicio centralizado para gestionar las operaciones académicas de los estudiantes,
+ * como sus inscripciones, desinscripciones y calificaciones.
+ */
 public class EstudianteService {
     private final Map<String, Estudiante> estudiantes;
     
@@ -28,6 +32,15 @@ public class EstudianteService {
         this.unitOfWork = unitOfWork;
     }
 
+    /**
+     * Hidrata el estado de la aplicación cargando los registros desde la base de datos
+     * y resolviendo las relaciones en memoria (mapeo ORM manual).
+     *
+     * @param conn Conexión activa a la base de datos.
+     * @param cursoService Servicio inyectado para buscar en memoria y asignar las referencias reales de los cursos.
+     * @param carreraService Servicio con la misma utilidad que cursoService. 
+     * @throws SQLException si ocurre un error de lectura durante la extracción de datos.
+     */
     public void inicializar(Connection conn, CarreraService carreraService, CursoService cursoService) throws SQLException {
         List<FilaEstudiante> filasEst = estudianteDAO.extraerEstudiantes(conn);
 
@@ -64,12 +77,30 @@ public class EstudianteService {
         this.unitOfWork.registrarAccion(conn -> this.estudianteDAO.insertarEstudiante(estudiante, conn));
     }   
 
+    /**
+     * Elimina a un estudiante del sistema mediante su RUT.
+     * <p>
+     * Nota sobre integridad: Debido a las reglas de cascada en la infraestructura 
+     * de la base de datos (ON DELETE CASCADE), eliminar al estudiante purgará 
+     * automáticamente todo su historial académico (registros y calificaciones) 
+     * asociado a su RUT.
+     *
+     * @param rut El RUT del estudiante a eliminar.
+     */
     public void eliminarEstudiante(String rut) {
         this.estudiantes.remove(rut);
 
         this.unitOfWork.registrarAccion(conn -> this.estudianteDAO.eliminarEstudiante(rut, conn));
     }
 
+    /**
+     * Inscribe un curso al estudiante tras validar los prerrequisitos, registrando la acción
+     * en la base de datos de manera transaccional.
+     *
+     * @param rut   RUT del estudiante.
+     * @param curso Curso a inscribir.
+     * @throws IllegalStateException si el estudiante ya se encuentra cursando la asignatura.
+     */
     public void agregarRegistro(String rut, Curso curso) {
         Estudiante est = buscarPorRut(rut);
         int tamañoPrevio = est.getRegistrosAcademicos().size();
@@ -94,6 +125,13 @@ public class EstudianteService {
         return est;
     }
 
+    /**
+     * Sustituye un registro académico existente (ej. cambio de estado o calificación) por uno nuevo actualizado.
+     *
+     * @param rut           RUT del estudiante.
+     * @param nuevoRegistro El nuevo estado del registro académico.
+     * @throws IllegalArgumentException si el estudiante no posee un registro previo de dicho curso.
+     */
     public void actualizarRegistro(String rut, RegistroAcademico nuevoRegistro) {
         Estudiante est = buscarPorRut(rut);
         

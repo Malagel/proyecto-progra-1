@@ -10,6 +10,12 @@ import java.util.List;
 import avancecurricular.model.Profesor;
 
 public class ProfesorDAO {
+
+    /**
+     * Clase contenedora (DTO) de uso interno del repositorio. 
+     * Su única responsabilidad es extraer y transportar temporalmente los datos crudos 
+     * de una fila de la base de datos antes de reconstruir el grafo de objetos del dominio.
+     */
     public static class FilaProfesor {
         private final String rut;
         private final String nombre;
