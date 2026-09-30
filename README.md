@@ -12,17 +12,17 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 - Maven
 - SQLite
 
-## Cómo usar
+## Cómo compilar y ejecutar el programa
 1. Clonar el repositorio y entrar a la carpeta:
 ```bash
-git clone [https://github.com/Malagel/proyecto-progra-1](https://github.com/Malagel/proyecto-progra-1)
+git clone https://github.com/Malagel/proyecto-progra-1]
 cd proyecto-progra-1
 ```
 2. Para compilar y ejecutar:
 ```bash
 mvn clean compile exec:java
 ```
-## Generar javadoc
+## Generar documentación con javadoc
 1. Dentro de proyecto-progra-1, generar index.html
 ```bash
 mvn javadoc:javadoc
