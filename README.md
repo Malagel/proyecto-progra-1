@@ -22,6 +22,13 @@ cd proyecto-progra-1
 ```bash
 mvn clean compile exec:java
 ```
+### Alternativa: desde Eclipse
+
+1. File > Import > Maven > Existing Maven Projects y seleccionar la carpeta `proyecto-progra-1`.
+2. Ejecutar `src/main/java/avancecurricular/Main.java` con Run As > Java Application.
+
+En ambos casos, al iniciar el programa pregunta el modo: `1` para consola o `2` para interfaz gráfica. La base de datos `sistema_academico.db` se crea en la carpeta del proyecto la primera vez que se ejecuta.
+
 ## Generar documentación con javadoc
 1. Dentro de proyecto-progra-1, generar index.html
 ```bash
