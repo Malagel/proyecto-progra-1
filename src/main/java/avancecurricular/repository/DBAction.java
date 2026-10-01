@@ -9,5 +9,11 @@ import java.sql.SQLException;
  */
 @FunctionalInterface
 public interface DBAction {
-    void ejecutar(Connection conn) throws SQLException;
+    /**
+     * Ejecuta la operación usando la conexión entregada.
+     *
+     * @param conn Conexión con la transacción abierta por {@link UnitOfWork}.
+     * @throws SQLException si la operación falla; en ese caso {@link UnitOfWork} hace rollback.
+     */
+	void ejecutar(Connection conn) throws SQLException;
 }

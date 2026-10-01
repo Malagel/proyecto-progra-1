@@ -4,9 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Entrega conexiones a la base de datos SQLite {@code sistema_academico.db}.
+ * El archivo se crea en la carpeta desde donde se ejecuta el programa.
+ */
 public class DatabaseConnection {
     private static final String URL = "jdbc:sqlite:sistema_academico.db?foreign_keys=on";  
 
+    /**
+     * Constructor privado: la clase solo expone métodos estáticos y no se instancia.
+     */
     private DatabaseConnection() {}
 
     /**

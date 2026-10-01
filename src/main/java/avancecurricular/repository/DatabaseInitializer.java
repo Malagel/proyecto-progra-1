@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Crea el esquema de la base de datos (8 tablas) la primera vez que se ejecuta el programa.
+ */
 public class DatabaseInitializer {
     private static final String[] TABLAS_SQL = {
         
@@ -71,6 +74,12 @@ public class DatabaseInitializer {
             + ");"
     };
 
+    /**
+     * Ejecuta los {@code CREATE TABLE IF NOT EXISTS} en orden: primero las tablas independientes
+     * y después las que tienen claves foráneas. Si las tablas ya existen, no modifica nada.
+     *
+     * @throws SQLException si no se puede abrir la base de datos o falla alguna sentencia.
+     */
     public static void crearTablasSiNoExisten() throws SQLException {
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement()) {
