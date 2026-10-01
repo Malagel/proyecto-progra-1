@@ -8,13 +8,31 @@ package avancecurricular.ui.view;
  * @param <C> El tipo de controlador (Controller) que gestionará y escuchará a esta vista.
  */
 public interface VistaBase<C> {
-    void setControlador(C controlador);
+    /**
+     * Asocia el controlador que recibirá las acciones del usuario en esta vista.
+     *
+     * @param controlador Controlador del módulo.
+     */
+	
+	void setControlador(C controlador);
     
     /**
      * Inicia y hace visible la vista actual. Puede desencadenar la carga inicial de datos.
      */
+	
     void iniciar();
     
+    /**
+     * Muestra al usuario un mensaje de confirmación o información.
+     *
+     * @param mensaje Texto a mostrar.
+     */
     void mostrarMensaje(String mensaje);
+    
+    /**
+     * Muestra al usuario un mensaje de error.
+     *
+     * @param error Descripción del error.
+     */
     void mostrarError(String error);
 }
