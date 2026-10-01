@@ -8,7 +8,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Objeto de acceso a datos (DAO) de la tabla {@code cursos}.
+ * Lee y escribe cursos en SQLite usando la conexión que le entrega
+ * {@code CursoService} al iniciar o el {@link UnitOfWork} al guardar.
+ */
 public class CursoDAO {
 
     /**
@@ -33,6 +37,13 @@ public class CursoDAO {
         public int getCreditos() { return creditos; }
     }
 
+    /**
+     * Lee todas las filas de la tabla {@code cursos}.
+     *
+     * @param conn Conexión abierta a la base de datos.
+     * @return Lista de filas crudas; vacía si la tabla no tiene registros.
+     * @throws SQLException si falla la consulta.
+     */
     public List<FilaCurso> extraerCursos(Connection conn) throws SQLException {
         List<FilaCurso> filas = new ArrayList<>();
         String sql = "SELECT id, nombre, creditos FROM cursos";
@@ -50,6 +61,13 @@ public class CursoDAO {
         return filas;
     }
 
+    /**
+     * Inserta un curso nuevo en la tabla {@code cursos}.
+     *
+     * @param curso Curso a guardar.
+     * @param conn  Conexión con la transacción abierta por {@link UnitOfWork}.
+     * @throws SQLException si falla la inserción (por ejemplo, si el ID ya existe).
+     */
     public void insertarCurso(Curso curso, Connection conn) throws SQLException {
         String sql = "INSERT INTO cursos (id, nombre, creditos) VALUES (?, ?, ?)";
 
@@ -61,6 +79,14 @@ public class CursoDAO {
         }
     }
 
+    /**
+     * Elimina el curso con el ID indicado. Las reglas de integridad (mallas,
+     * prerrequisitos y registros) se validan antes en {@code CursoService}.
+     *
+     * @param id   Identificador del curso a eliminar.
+     * @param conn Conexión con la transacción abierta por {@link UnitOfWork}.
+     * @throws SQLException si falla el borrado.
+     */
     public void eliminarCurso(String id, Connection conn) throws SQLException {
         String sql = "DELETE FROM cursos WHERE id = ?";
 
@@ -70,6 +96,13 @@ public class CursoDAO {
         }
     }
 
+    /**
+     * Actualiza el nombre y los créditos de un curso existente, buscándolo por su ID.
+     *
+     * @param curso Curso con los datos ya modificados en memoria.
+     * @param conn  Conexión con la transacción abierta por {@link UnitOfWork}.
+     * @throws SQLException si falla la actualización.
+     */
     public void actualizarCurso(Curso curso, Connection conn) throws SQLException {
         String sql = "UPDATE cursos SET nombre = ?, creditos = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {

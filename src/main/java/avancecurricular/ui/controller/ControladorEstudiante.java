@@ -19,6 +19,14 @@ public class ControladorEstudiante {
     private final CarreraService carreraService;
     private final CursoService cursoService;
 
+    /**
+     * Crea el controlador del módulo de Estudiantes y se registra en su vista.
+     *
+     * @param vista             Vista (consola o ventana) que muestra los resultados.
+     * @param estudianteService Servicio principal del módulo.
+     * @param carreraService    Se usa para buscar la carrera al registrar un estudiante.
+     * @param cursoService      Se usa para buscar los cursos al inscribir o actualizar registros.
+     */
     public ControladorEstudiante(VistaEstudiante vista, EstudianteService estudianteService, CarreraService carreraService, CursoService cursoService) {
         this.vista = vista;
         this.estudianteService = estudianteService;
@@ -27,10 +35,20 @@ public class ControladorEstudiante {
         this.vista.setControlador(this);
     }
 
+    /**
+     * Pide a la vista que muestre todos los estudiantes registrados.
+     */
     public void onSolicitarListaEstudiantes() {
         vista.mostrarListaEstudiantes(estudianteService.obtenerTodos());
     }
 
+    /**
+     * Registra un estudiante nuevo en una carrera existente y refresca el listado.
+     *
+     * @param rut       RUT del estudiante (máximo 10 caracteres).
+     * @param nombre    Nombre del estudiante.
+     * @param idCarrera Carrera en la que se matricula.
+     */
     public void onAgregarEstudiante(String rut, String nombre, String idCarrera) {
         try {
             Carrera carrera = carreraService.buscarPorId(idCarrera);
@@ -46,6 +64,11 @@ public class ControladorEstudiante {
         }
     }
 
+    /**
+     * Elimina un estudiante y refresca el listado.
+     *
+     * @param rut RUT del estudiante.
+     */
     public void onEliminarEstudiante(String rut) {
         try {
             estudianteService.eliminarEstudiante(rut);
@@ -56,6 +79,12 @@ public class ControladorEstudiante {
         }
     }
 
+    /**
+     * Inscribe un curso en estado CURSANDO, solo si el estudiante aprobó sus prerrequisitos.
+     *
+     * @param rut     RUT del estudiante.
+     * @param idCurso Curso a inscribir.
+     */
     public void onInscribirCurso(String rut, String idCurso) {
         try {
             Curso curso = cursoService.buscarPorId(idCurso);
@@ -67,6 +96,14 @@ public class ControladorEstudiante {
         }
     }
 
+    /**
+     * Cambia la nota y el estado de un curso ya inscrito por el estudiante.
+     *
+     * @param rut     RUT del estudiante.
+     * @param idCurso Curso del registro.
+     * @param nota    Nota nueva (1.0 a 7.0, salvo en estado CURSANDO).
+     * @param estado  APROBADO, REPROBADO o CURSANDO.
+     */
     public void onActualizarRegistro(String rut, String idCurso, double nota, String estado) {
         try {
             Curso curso = cursoService.buscarPorId(idCurso);
@@ -79,6 +116,11 @@ public class ControladorEstudiante {
         }
     }
 
+    /**
+     * Muestra el expediente académico de un estudiante.
+     *
+     * @param rut RUT del estudiante.
+     */
     public void onSolicitarRegistros(String rut) {
         try {
             Estudiante estudiante = estudianteService.buscarPorRut(rut);
@@ -88,6 +130,12 @@ public class ControladorEstudiante {
         }
     }
 
+    /**
+     * Quita un curso del expediente del estudiante.
+     *
+     * @param rut     RUT del estudiante.
+     * @param idCurso Curso a desinscribir.
+     */
     public void onDesinscribirCurso(String rut, String idCurso) {
         try {
             Curso curso = cursoService.buscarPorId(idCurso);
