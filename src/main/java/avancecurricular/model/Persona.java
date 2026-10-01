@@ -2,6 +2,11 @@ package avancecurricular.model;
 
 import java.util.Objects;
 
+/**
+ * Clase base abstracta de las personas del sistema ({@link Estudiante} y {@link Profesor}).
+ * Concentra el RUT, que es el identificador único, y el nombre.
+ */
+
 public abstract class Persona {
     private final String rut;
     private String nombre;
