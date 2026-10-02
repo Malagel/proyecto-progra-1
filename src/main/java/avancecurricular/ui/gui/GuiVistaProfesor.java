@@ -8,6 +8,9 @@ import avancecurricular.ui.view.VistaProfesor;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.util.Collection;
 
@@ -18,11 +21,13 @@ import java.util.Collection;
  */
 public class GuiVistaProfesor extends JPanel implements VistaProfesor {
     private ControladorProfesor controlador;
-
     private JTextField txtRut;
     private JTextField txtNombre;
     private DefaultTableModel tableModel;
     private JTable tablaProfesores;
+    
+    private TableRowSorter<DefaultTableModel> rowSorter;
+    private JTextField txtBuscar;
 
     public GuiVistaProfesor() {
         setLayout(new BorderLayout(20, 20));
@@ -77,24 +82,24 @@ public class GuiVistaProfesor extends JPanel implements VistaProfesor {
         String[] columnas = {"RUT", "Nombre", "Cursos Asignados"};
         tableModel = new DefaultTableModel(columnas, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) { 
-                return false; 
-            }
+            public boolean isCellEditable(int row, int column) {
+                 return false;
+             }
         };
         
         tablaProfesores = new JTable(tableModel);
         tablaProfesores.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tablaProfesores.getTableHeader().setReorderingAllowed(false);
         
-        tablaProfesores.setRowHeight(35); 
-        tablaProfesores.getTableHeader().setPreferredSize(new Dimension(0, 40)); 
-        tablaProfesores.setShowVerticalLines(false); 
+        tablaProfesores.setRowHeight(35);
+        tablaProfesores.getTableHeader().setPreferredSize(new Dimension(0, 40));
+        tablaProfesores.setShowVerticalLines(false);
         
         DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10)); 
+                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
                 return this;
             }
         };
@@ -109,7 +114,39 @@ public class GuiVistaProfesor extends JPanel implements VistaProfesor {
             BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
         
-        add(scrollPane, BorderLayout.CENTER);
+        rowSorter = new TableRowSorter<>(tableModel);
+        tablaProfesores.setRowSorter(rowSorter);
+
+        JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        panelBusqueda.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        panelBusqueda.add(new JLabel("Filtrar:"));
+        
+        txtBuscar = new JTextField(20);
+        panelBusqueda.add(txtBuscar);
+
+        txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) { filtrarTabla(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { filtrarTabla(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { filtrarTabla(); }
+
+            private void filtrarTabla() {
+                String texto = txtBuscar.getText();
+                if (texto.trim().isEmpty()) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
+                }
+            }
+        });
+
+        JPanel panelCentral = new JPanel(new BorderLayout());
+        panelCentral.add(panelBusqueda, BorderLayout.NORTH);
+        panelCentral.add(scrollPane, BorderLayout.CENTER);
+        
+        add(panelCentral, BorderLayout.CENTER);
 
         btnAgregar.addActionListener(e -> {
             if (controlador != null) {
@@ -129,11 +166,11 @@ public class GuiVistaProfesor extends JPanel implements VistaProfesor {
         btnEliminar.addActionListener(e -> {
             String rut = obtenerRutSeleccionado();
             if (rut != null && controlador != null) {
-                int confirmacion = JOptionPane.showConfirmDialog(this, 
-                    "¿Está seguro que desea eliminar al profesor con RUT " + rut + "?", 
-                    "Confirmar Eliminación", 
-                    JOptionPane.YES_NO_OPTION);
-                    
+                int confirmacion = JOptionPane.showConfirmDialog(this,
+                     "¿Está seguro que desea eliminar al profesor con RUT " + rut + "?",
+                     "Confirmar Eliminación",
+                     JOptionPane.YES_NO_OPTION);
+                     
                 if (confirmacion == JOptionPane.YES_OPTION) {
                     controlador.onEliminarProfesor(rut);
                 }
@@ -150,11 +187,11 @@ public class GuiVistaProfesor extends JPanel implements VistaProfesor {
         btnAsignarCurso.addActionListener(e -> {
             String rut = obtenerRutSeleccionado();
             if (rut != null && controlador != null) {
-                String idCurso = JOptionPane.showInputDialog(this, 
-                    "Ingrese el ID del curso a asignar:", 
-                    "Asignar Curso", 
-                    JOptionPane.QUESTION_MESSAGE);
-                    
+                String idCurso = JOptionPane.showInputDialog(this,
+                     "Ingrese el ID del curso a asignar:",
+                     "Asignar Curso",
+                     JOptionPane.QUESTION_MESSAGE);
+                     
                 if (idCurso != null && !idCurso.trim().isEmpty()) {
                     controlador.onAsignarCurso(rut, idCurso.trim());
                 }
@@ -164,11 +201,11 @@ public class GuiVistaProfesor extends JPanel implements VistaProfesor {
         btnRemoverCurso.addActionListener(e -> {
             String rut = obtenerRutSeleccionado();
             if (rut != null && controlador != null) {
-                String idCurso = JOptionPane.showInputDialog(this, 
-                    "Ingrese el ID del curso a remover:", 
-                    "Remover Curso", 
-                    JOptionPane.WARNING_MESSAGE);
-                    
+                String idCurso = JOptionPane.showInputDialog(this,
+                     "Ingrese el ID del curso a remover:",
+                     "Remover Curso",
+                     JOptionPane.WARNING_MESSAGE);
+                     
                 if (idCurso != null && !idCurso.trim().isEmpty()) {
                     controlador.onRemoverCurso(rut, idCurso.trim());
                 }
@@ -185,7 +222,8 @@ public class GuiVistaProfesor extends JPanel implements VistaProfesor {
     private String obtenerRutSeleccionado() {
         int fila = tablaProfesores.getSelectedRow();
         if (fila >= 0) {
-            return (String) tableModel.getValueAt(fila, 0);
+            int filaModelo = tablaProfesores.convertRowIndexToModel(fila);
+            return (String) tableModel.getValueAt(filaModelo, 0);
         } else {
             mostrarError("Debe seleccionar un profesor de la tabla para realizar esta acción.");
             return null;

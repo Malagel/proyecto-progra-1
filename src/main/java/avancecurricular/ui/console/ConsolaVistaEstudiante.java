@@ -33,8 +33,8 @@ public class ConsolaVistaEstudiante implements VistaEstudiante {
             System.out.println("2. Registrar estudiante");
             System.out.println("3. Eliminar estudiante");
             System.out.println("4. Inscribir curso a estudiante");
-            System.out.println("5. Actualizar registro (calificar)");
-            System.out.println("6. Ver registros académicos");
+            System.out.println("5. Actualizar registro (curso) de estudiante");
+            System.out.println("6. Buscar y ver estudiante");
             System.out.println("7. Retirar/Desinscribir curso");
             System.out.println("0. Volver al menú principal");
 

@@ -8,6 +8,9 @@ import avancecurricular.ui.view.VistaCarrera;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,13 +23,15 @@ import java.util.List;
  * delegando la reactividad (actualizaciones, registros, eliminaciones) mediante listeners hacia el controlador.
  */
 public class GuiVistaCarrera extends JPanel implements VistaCarrera {
-    private ControladorCarrera controlador;
 
+    private ControladorCarrera controlador;
     private JTextField txtId;
     private JTextField txtNombre;
     private JTextField txtCreditos;
     private DefaultTableModel tableModel;
     private JTable tablaCarreras;
+    private TableRowSorter<DefaultTableModel> rowSorter;
+    private JTextField txtBuscar;
 
     public GuiVistaCarrera() {
         setLayout(new BorderLayout(20, 20));
@@ -85,24 +90,24 @@ public class GuiVistaCarrera extends JPanel implements VistaCarrera {
         String[] columnas = {"ID", "Nombre", "Créditos Totales", "Cant. Asignaturas"};
         tableModel = new DefaultTableModel(columnas, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) { 
-                return false; 
-            }
+            public boolean isCellEditable(int row, int column) {
+                 return false;
+             }
         };
         
         tablaCarreras = new JTable(tableModel);
         tablaCarreras.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tablaCarreras.getTableHeader().setReorderingAllowed(false);
         
-        tablaCarreras.setRowHeight(35); 
-        tablaCarreras.getTableHeader().setPreferredSize(new Dimension(0, 40)); 
-        tablaCarreras.setShowVerticalLines(false); 
+        tablaCarreras.setRowHeight(35);
+        tablaCarreras.getTableHeader().setPreferredSize(new Dimension(0, 40));
+        tablaCarreras.setShowVerticalLines(false);
         
         DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10)); 
+                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
                 return this;
             }
         };
@@ -117,7 +122,39 @@ public class GuiVistaCarrera extends JPanel implements VistaCarrera {
             BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
         
-        add(scrollPane, BorderLayout.CENTER);
+        rowSorter = new TableRowSorter<>(tableModel);
+        tablaCarreras.setRowSorter(rowSorter);
+
+        JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        panelBusqueda.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        panelBusqueda.add(new JLabel("Filtrar:"));
+        
+        txtBuscar = new JTextField(20);
+        panelBusqueda.add(txtBuscar);
+
+        txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) { filtrarTabla(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { filtrarTabla(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { filtrarTabla(); }
+
+            private void filtrarTabla() {
+                String texto = txtBuscar.getText();
+                if (texto.trim().isEmpty()) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
+                }
+            }
+        });
+
+        JPanel panelCentral = new JPanel(new BorderLayout());
+        panelCentral.add(panelBusqueda, BorderLayout.NORTH);
+        panelCentral.add(scrollPane, BorderLayout.CENTER);
+        
+        add(panelCentral, BorderLayout.CENTER);
 
         btnAgregar.addActionListener(e -> {
             if (controlador != null) {
@@ -142,11 +179,11 @@ public class GuiVistaCarrera extends JPanel implements VistaCarrera {
         btnEliminar.addActionListener(e -> {
             String idCarrera = obtenerIdSeleccionado();
             if (idCarrera != null && controlador != null) {
-                int confirmacion = JOptionPane.showConfirmDialog(this, 
-                    "¿Está seguro que desea eliminar la carrera " + idCarrera + "?", 
-                    "Confirmar Eliminación", 
-                    JOptionPane.YES_NO_OPTION);
-                    
+                int confirmacion = JOptionPane.showConfirmDialog(this,
+                     "¿Está seguro que desea eliminar la carrera " + idCarrera + "?",
+                     "Confirmar Eliminación",
+                     JOptionPane.YES_NO_OPTION);
+                     
                 if (confirmacion == JOptionPane.YES_OPTION) {
                     controlador.onEliminarCarrera(idCarrera);
                 }
@@ -206,13 +243,14 @@ public class GuiVistaCarrera extends JPanel implements VistaCarrera {
     /**
      * Extrae de forma segura el identificador de la entidad en la fila seleccionada por el usuario.
      *
-     * @return El identificador (ej. ID o RUT) contenido en la columna 0, 
+     * @return El identificador (ej. ID o RUT) contenido en la columna 0,
      *         o {@code null} si no hay ninguna fila seleccionada en la tabla.
      */
     private String obtenerIdSeleccionado() {
         int fila = tablaCarreras.getSelectedRow();
         if (fila >= 0) {
-            return (String) tableModel.getValueAt(fila, 0);
+            int filaModelo = tablaCarreras.convertRowIndexToModel(fila);
+            return (String) tableModel.getValueAt(filaModelo, 0);
         } else {
             mostrarError("Debe seleccionar una carrera de la tabla para realizar esta acción.");
             return null;
@@ -243,9 +281,9 @@ public class GuiVistaCarrera extends JPanel implements VistaCarrera {
         tableModel.setRowCount(0);
         for (Carrera carrera : carreras) {
             tableModel.addRow(new Object[]{
-                carrera.getId(), 
-                carrera.getNombre(), 
-                carrera.getCreditosTotales(), 
+                carrera.getId(),
+                carrera.getNombre(),
+                carrera.getCreditosTotales(),
                 carrera.getPlanDeEstudio().size()
             });
         }

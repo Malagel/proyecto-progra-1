@@ -8,6 +8,9 @@ import avancecurricular.ui.view.VistaEstudiante;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.util.Collection;
 
@@ -17,13 +20,16 @@ import java.util.Collection;
  * delegando la reactividad (actualizaciones, registros, eliminaciones) mediante listeners hacia el controlador.
  */
 public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
-    private ControladorEstudiante controlador;
 
+    private ControladorEstudiante controlador;
     private JTextField txtRut;
     private JTextField txtNombre;
     private JTextField txtIdCarrera;
     private DefaultTableModel tableModel;
     private JTable tablaEstudiantes;
+    
+    private TableRowSorter<DefaultTableModel> rowSorter;
+    private JTextField txtBuscar;
 
     public GuiVistaEstudiante() {
         setLayout(new BorderLayout(20, 20));
@@ -84,24 +90,24 @@ public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
         String[] columnas = {"RUT", "Nombre", "Carrera", "Avance (%)"};
         tableModel = new DefaultTableModel(columnas, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) { 
-                return false; 
-            }
+            public boolean isCellEditable(int row, int column) {
+                 return false;
+             }
         };
         
         tablaEstudiantes = new JTable(tableModel);
         tablaEstudiantes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tablaEstudiantes.getTableHeader().setReorderingAllowed(false);
         
-        tablaEstudiantes.setRowHeight(35); 
-        tablaEstudiantes.getTableHeader().setPreferredSize(new Dimension(0, 40)); 
-        tablaEstudiantes.setShowVerticalLines(false); 
+        tablaEstudiantes.setRowHeight(35);
+        tablaEstudiantes.getTableHeader().setPreferredSize(new Dimension(0, 40));
+        tablaEstudiantes.setShowVerticalLines(false);
         
         DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10)); 
+                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
                 return this;
             }
         };
@@ -116,7 +122,39 @@ public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
             BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
         
-        add(scrollPane, BorderLayout.CENTER);
+        rowSorter = new TableRowSorter<>(tableModel);
+        tablaEstudiantes.setRowSorter(rowSorter);
+
+        JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        panelBusqueda.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        panelBusqueda.add(new JLabel("Filtrar:"));
+        
+        txtBuscar = new JTextField(20);
+        panelBusqueda.add(txtBuscar);
+
+        txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) { filtrarTabla(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { filtrarTabla(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { filtrarTabla(); }
+
+            private void filtrarTabla() {
+                String texto = txtBuscar.getText();
+                if (texto.trim().isEmpty()) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
+                }
+            }
+        });
+
+        JPanel panelCentral = new JPanel(new BorderLayout());
+        panelCentral.add(panelBusqueda, BorderLayout.NORTH);
+        panelCentral.add(scrollPane, BorderLayout.CENTER);
+        
+        add(panelCentral, BorderLayout.CENTER);
 
         btnAgregar.addActionListener(e -> {
             if (controlador != null) {
@@ -137,11 +175,11 @@ public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
         btnEliminar.addActionListener(e -> {
             String rut = obtenerRutSeleccionado();
             if (rut != null && controlador != null) {
-                int confirmacion = JOptionPane.showConfirmDialog(this, 
-                    "¿Está seguro que desea eliminar al estudiante con RUT " + rut + "?", 
-                    "Confirmar Eliminación", 
-                    JOptionPane.YES_NO_OPTION);
-                    
+                int confirmacion = JOptionPane.showConfirmDialog(this,
+                     "¿Está seguro que desea eliminar al estudiante con RUT " + rut + "?",
+                     "Confirmar Eliminación",
+                     JOptionPane.YES_NO_OPTION);
+                     
                 if (confirmacion == JOptionPane.YES_OPTION) {
                     controlador.onEliminarEstudiante(rut);
                 }
@@ -158,11 +196,11 @@ public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
         btnInscribirCurso.addActionListener(e -> {
             String rut = obtenerRutSeleccionado();
             if (rut != null && controlador != null) {
-                String idCurso = JOptionPane.showInputDialog(this, 
-                    "Ingrese el ID del curso a inscribir:", 
-                    "Inscribir Curso", 
-                    JOptionPane.QUESTION_MESSAGE);
-                    
+                String idCurso = JOptionPane.showInputDialog(this,
+                     "Ingrese el ID del curso a inscribir:",
+                     "Inscribir Curso",
+                     JOptionPane.QUESTION_MESSAGE);
+                     
                 if (idCurso != null && !idCurso.trim().isEmpty()) {
                     controlador.onInscribirCurso(rut, idCurso.trim());
                 }
@@ -172,11 +210,11 @@ public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
         btnRetirarCurso.addActionListener(e -> {
             String rut = obtenerRutSeleccionado();
             if (rut != null && controlador != null) {
-                String idCurso = JOptionPane.showInputDialog(this, 
-                    "Ingrese el ID del curso a desinscribir:", 
-                    "Retirar Curso", 
-                    JOptionPane.WARNING_MESSAGE);
-                    
+                String idCurso = JOptionPane.showInputDialog(this,
+                     "Ingrese el ID del curso a desinscribir:",
+                     "Retirar Curso",
+                     JOptionPane.WARNING_MESSAGE);
+                     
                 if (idCurso != null && !idCurso.trim().isEmpty()) {
                     controlador.onDesinscribirCurso(rut, idCurso.trim());
                 }
@@ -193,7 +231,7 @@ public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
                     RegistroAcademico.ESTADO_APROBADO, 
                     RegistroAcademico.ESTADO_REPROBADO
                 });
-
+                
                 Object[] inputs = {
                     "ID del Curso:", txtIdCurso,
                     "Nota obtenida (ej: 5.5, 0.0 si está cursando):", txtNota,
@@ -230,7 +268,8 @@ public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
     private String obtenerRutSeleccionado() {
         int fila = tablaEstudiantes.getSelectedRow();
         if (fila >= 0) {
-            return (String) tableModel.getValueAt(fila, 0);
+            int filaModelo = tablaEstudiantes.convertRowIndexToModel(fila);
+            return (String) tableModel.getValueAt(filaModelo, 0);
         } else {
             mostrarError("Debe seleccionar un estudiante de la tabla para realizar esta acción.");
             return null;
@@ -274,11 +313,12 @@ public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
         StringBuilder sb = new StringBuilder();
         sb.append("=== Expediente Académico: ").append(estudiante.getNombre()).append(" ===\n");
         sb.append("Carrera: ").append(estudiante.getCarrera().getNombre()).append("\n");
+        
         sb.append(String.format("Avance Curricular: %.1f%%\n", estudiante.calcularPorcentajeAvance()));
         sb.append("Créditos Aprobados: ").append(estudiante.obtenerCreditosAprobados())
           .append(" / ").append(estudiante.getCarrera().getCreditosTotales()).append("\n");
         sb.append("--------------------------------------------------\n");
-
+        
         if (estudiante.getRegistrosAcademicos().isEmpty()) {
             sb.append("(No posee registros académicos vigentes)\n");
         } else {
@@ -291,7 +331,7 @@ public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
                 ));
             }
         }
-
+        
         JTextArea textArea = new JTextArea(sb.toString());
         textArea.setEditable(false);
         
@@ -301,7 +341,7 @@ public class GuiVistaEstudiante extends JPanel implements VistaEstudiante {
         
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setPreferredSize(new Dimension(650, 400));
-
+        
         JOptionPane.showMessageDialog(this, scrollPane, "Expediente: " + estudiante.getRut(), JOptionPane.INFORMATION_MESSAGE);
     }
 

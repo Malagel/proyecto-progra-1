@@ -34,7 +34,7 @@ public class ConsolaVistaProfesor implements VistaProfesor {
             System.out.println("3. Eliminar profesor");
             System.out.println("4. Asignar curso a profesor");
             System.out.println("5. Remover curso de profesor");
-            System.out.println("6. Ver cursos dictados por profesor");
+            System.out.println("6. Buscar y ver profesor");
             System.out.println("0. Volver al menú principal");
 
             int opcion = LectorConsola.leerEntero("> ");
