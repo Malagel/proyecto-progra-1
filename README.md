@@ -13,7 +13,7 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 - SQLite
 
 ## Cómo compilar y ejecutar el programa
-1. Clonar el repositorio y entrar a la carpeta:
+1. Clonar el repositorio y entrar a la carpeta (o sólo entrar a la carpeta si se tiene localmente ya):
 ```bash
 git clone https://github.com/Malagel/sistema-avance-curricular
 cd sistema-avance-curricular
