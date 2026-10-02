@@ -31,7 +31,7 @@ public class ConsolaVistaCarrera implements VistaCarrera {
             System.out.println("1. Listar todas las carreras");
             System.out.println("2. Registrar nueva carrera");
             System.out.println("3. Eliminar una carrera");
-            System.out.println("4. Ver malla curricular");
+            System.out.println("4. Buscar y ver carrera");
             System.out.println("5. Agregar curso a la malla");
             System.out.println("6. Agregar prerrequisito a un curso");
             System.out.println("0. Volver al menú principal");
