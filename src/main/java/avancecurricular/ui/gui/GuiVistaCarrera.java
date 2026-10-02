@@ -63,7 +63,7 @@ public class GuiVistaCarrera extends JPanel implements VistaCarrera {
 
         JPanel panelBotones = new JPanel(new GridLayout(4, 1, 0, 10));
         panelBotones.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createTitledBorder("Acciones (Requiere Selección)"),
+            BorderFactory.createTitledBorder("Acciones"),
             BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         
