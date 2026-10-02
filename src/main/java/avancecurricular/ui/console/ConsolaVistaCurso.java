@@ -31,7 +31,8 @@ public class ConsolaVistaCurso implements VistaCurso {
             System.out.println("1. Listar todos los cursos");
             System.out.println("2. Registrar nuevo curso");
             System.out.println("3. Eliminar un curso");
-            System.out.println("4 Modificar un curso");
+            System.out.println("4. Modificar un curso");
+            System.out.println("5. Buscar y ver curso");
             System.out.println("0. Volver al menú principal");
 
             int opcion = LectorConsola.leerEntero("> ");
@@ -41,6 +42,7 @@ public class ConsolaVistaCurso implements VistaCurso {
                 case 2: formularioAgregarCurso(); break;
                 case 3: formularioEliminarCurso(); break;
                 case 4: formularioModificarCurso(); break;
+                case 5: formularioVerCurso(); break;
                 case 0: enSubmenu = false; break;
                 default: System.out.println("[!] Opción inválida.");
             }
@@ -68,6 +70,11 @@ public class ConsolaVistaCurso implements VistaCurso {
         int nuevosCreditos = LectorConsola.leerEntero("Nuevos créditos: ");
         
         controlador.onModificarCurso(id, nuevoNombre, nuevosCreditos); 
+    }
+
+    private void formularioVerCurso() {
+        String id = LectorConsola.leerTexto("ID del curso a buscar y ver detalles: ");
+        controlador.onConsultarDetalleCurso(id);
     }
 
     @Override
