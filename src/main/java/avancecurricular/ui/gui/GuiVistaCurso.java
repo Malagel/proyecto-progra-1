@@ -6,6 +6,9 @@ import avancecurricular.model.Profesor;
 import avancecurricular.ui.controller.ControladorCurso;
 import avancecurricular.ui.view.VistaCurso;
 
+import javax.swing.table.TableRowSorter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -24,6 +27,8 @@ public class GuiVistaCurso extends JPanel implements VistaCurso {
     private JTextField txtCreditos;
     private DefaultTableModel tableModel;
     private JTable tablaCursos;
+    private TableRowSorter<DefaultTableModel> rowSorter;
+    private JTextField txtBuscar;
 
     public GuiVistaCurso() {
         setLayout(new BorderLayout(20, 20));
@@ -110,7 +115,39 @@ public class GuiVistaCurso extends JPanel implements VistaCurso {
             BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
         
-        add(scrollPane, BorderLayout.CENTER);
+        rowSorter = new TableRowSorter<>(tableModel);
+        tablaCursos.setRowSorter(rowSorter);
+
+        JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        panelBusqueda.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        panelBusqueda.add(new JLabel("Filtrar:"));
+        
+        txtBuscar = new JTextField(20);
+        panelBusqueda.add(txtBuscar);
+
+        txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) { filtrarTabla(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { filtrarTabla(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { filtrarTabla(); }
+
+            private void filtrarTabla() {
+                String texto = txtBuscar.getText();
+                if (texto.trim().isEmpty()) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
+                }
+            }
+        });
+
+        JPanel panelCentral = new JPanel(new BorderLayout());
+        panelCentral.add(panelBusqueda, BorderLayout.NORTH);
+        panelCentral.add(scrollPane, BorderLayout.CENTER);
+        
+        add(panelCentral, BorderLayout.CENTER);
 
         btnAgregar.addActionListener(e -> {
             if (controlador != null) {
@@ -193,7 +230,8 @@ public class GuiVistaCurso extends JPanel implements VistaCurso {
     private String obtenerIdSeleccionado() {
         int fila = tablaCursos.getSelectedRow();
         if (fila >= 0) {
-            return (String) tableModel.getValueAt(fila, 0);
+            int filaModelo = tablaCursos.convertRowIndexToModel(fila);
+            return (String) tableModel.getValueAt(filaModelo, 0);
         } else {
             mostrarError("Debe seleccionar un curso de la tabla para realizar esta acción.");
             return null;
