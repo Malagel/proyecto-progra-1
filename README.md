@@ -15,8 +15,8 @@ Permite registrar alumnos, profesores y asignaturas de un instituto, y llevar el
 ## Cómo compilar y ejecutar el programa
 1. Clonar el repositorio y entrar a la carpeta:
 ```bash
-git clone https://github.com/Malagel/proyecto-progra-1
-cd proyecto-progra-1
+git clone https://github.com/Malagel/sistema-avance-curricular
+cd sistema-avance-curricular
 ```
 2. Para compilar y ejecutar:
 ```bash
@@ -24,7 +24,7 @@ mvn clean compile exec:java
 ```
 ### Alternativa: desde Eclipse
 
-1. File > Import > Maven > Existing Maven Projects y seleccionar la carpeta `proyecto-progra-1`.
+1. File > Import > Maven > Existing Maven Projects y seleccionar la carpeta `sistema-avance-curricular`.
 2. Ejecutar `src/main/java/avancecurricular/Main.java` con Run As > Java Application.
 
 En ambos casos, al iniciar el programa pregunta el modo: `1` para consola o `2` para interfaz gráfica. La base de datos `sistema_academico.db` se crea en la carpeta del proyecto la primera vez que se ejecuta.
